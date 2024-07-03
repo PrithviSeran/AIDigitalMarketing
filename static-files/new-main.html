@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="whole">
+        <div class="camapign-card">
+            <div class="campaign-header">
+                <h2>Your Campaigns</h2>
+            </div>
+            <div class="stack">
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+            </div>
+        </div>
+        <div class="new-campaign">
+            <h1> Create a new Campaign </h1>
+
+            <div>
+                <form method="POST" class="form-container">
+                    <!--{% csrf_token %}-->
+                    
+                    <label for="campaign-name">Name of the Campaign:</label>
+                    <!--{{ form.name }}-->
+                    <input type="text" id="campaign-name" name="campaign-name" required> 
+            
+                    <label for="campaign-use">Use of the Campaign:</label>
+                    <select id="campaign-use" name="campaign-use" required>
+                        <option value="personal">Personal</option>
+                        <option value="business">Business</option>
+                    </select>
+                    
+            
+                    <!--
+                    {{ form.use }}
+                    -->
+            
+                    <label for="user-info">Information About Yourself:</label>
+                    
+                    <textarea id="user-info" name="user-info" rows="4" required></textarea> 
+                    <!-- {{ form.user_info }} -->
+            
+                    <label for="campaign-purpose">Purpose of the Campaign:</label>
+                    
+                    <textarea id="campaign-purpose" name="campaign-purpose" rows="4" required></textarea> 
+            
+                    <!-- {{ form.purpose }} -->
+            
+                    <label for="target-audience">Who Are You Trying to Target:</label>
+                    <textarea id="target-audience" name="target-audience" rows="4" required></textarea> 
+                    <!--  {{ form.target_audience }}-->
+                    
+                    <a href="{% url 'campaign' %}">
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
