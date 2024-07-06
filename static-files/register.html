@@ -4,294 +4,40 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>My Login Page &mdash; Bootstrap 4 Login Page Snippet</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<style>
-		html,body {
-			height: 100%;
-		}
-
-		body.my-login-page {
-			
-			background-color: #000000;
-			
-			font-size: 14px;
-		}
-
-		.my-login-page .brand {
-			width: 90px;
-			height: 90px;
-			overflow: hidden;
-			border-radius: 50%;
-			margin: 40px auto;
-			box-shadow: 0 4px 8px rgba(0,0,0,.05);
-			position: relative;
-			z-index: 1;
-		}
-
-		.card{
-			background-color: #000000;
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: normal;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-Regular.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: italic;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-RegularItalic.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: normal;
-			font-weight: 500;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-Medium.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: italic;
-			font-weight: 500;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-MediumItalic.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: normal;
-			font-weight: 600;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-Semibold.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: italic;
-			font-weight: 600;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-SemiboldItalic.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: normal;
-			font-weight: 700;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-Bold.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: italic;
-			font-weight: 700;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-BoldItalic.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: normal;
-			font-weight: 800;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradual-Extrabold.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: italic;
-			font-weight: 800;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradualExtraboldItalic.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: normal;
-			font-weight: 900;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradualBlack.woff2)
-		}
-
-		@font-face {
-			font-family: BwGradual;
-			font-style: italic;
-			font-weight: 900;
-			src:url(/fonts/Bw-Gradual/woff2/BwGradualBlackItalic.woff2)
-		}
-
-		@font-face {
-			font-family: Fira Mono;
-			font-style: normal;
-			font-style: 400;
-			src:url(/fonts/Fira_Mono/FiraMono-Regular.ttf)
-		}
-
-		@font-face {
-			font-family: Atkinson;
-			font-style: normal;
-			font-style: 400;
-			src:url(/fonts/Atkinson/AtkinsonHyperlegible-Regular.ttf)
-		}
-
-		@font-face {
-			font-family: Atkinson;
-			font-style: bold;
-			font-style: 700;
-			src:url(/fonts/Atkinson/AtkinsonHyperlegible-Bold.ttf)
-		}
-
-		h2{
-			color: white;
-			font-size: 2.5rem !important;
-			line-height: 1 !important;
-			font-weight: 700 !important;
-			text-align: center;
-			font-family: BwGradual, sans-serif !important;
-		}
-
-		label{
-			color: white;
-		}
-
-		div{
-			color: white;
-		}
-
-		.my-login-page .brand img {
-			width: 100%;
-		}
-
-		.my-login-page .card-wrapper {
-			width: 400px;
-		}
-
-		.my-login-page .card {
-			border-color: transparent;
-			box-shadow: 0 4px 8px rgba(0,0,0,.05);
-		}
-
-		.my-login-page .card.fat {
-			padding: 10px;
-		}
-
-		.my-login-page .card .card-title {
-			margin-bottom: 30px;
-		}
-
-		.my-login-page .form-control {
-			border-width: 2.3px;
-		}
-
-		.my-login-page .form-group label {
-			width: 100%;
-		}
-
-		.my-login-page .btn.btn-block {
-			padding: 12px 10px;
-		}
-
-		.my-login-page .footer {
-			margin: 40px 0;
-			color: #888;
-			text-align: center;
-		}
-
-		@media screen and (max-width: 425px) {
-			.my-login-page .card-wrapper {
-				width: 90%;
-				margin: 0 auto;
-			}
-		}
-
-		@media screen and (max-width: 320px) {
-			.my-login-page .card.fat {
-				padding: 0;
-			}
-
-			.my-login-page .card.fat .card-body {
-				padding: 15px;
-			}
-		}
-
-		.card-title{
-			display: block;
-			background: linear-gradient(to right, #fc540c, #ffe8c3);
-			-webkit-background-clip: text;
-			padding: 1em;
-			color: transparent;
-		}
-	</style>
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+	
 </head>
-<body class="my-login-page">
-	<section class="h-100">
-		<div class="container h-100">
-			<div class="row justify-content-md-center h-100">
-				<div class="card-wrapper">
-					<div class="brand">
-						<img src="img/logo.jpg" alt="bootstrap 4 login page">
-					</div>
-					<div class="card fat">
-						<div class="card-body">
-							<h2 class="card-title">Register</h2>
-							<form method="POST" class="my-login-validation" novalidate="">
-								{% csrf_token %}
-								{{ form.as_p }}
+<body>
+	<section class="regitser-card">
+		<h2>Login</h2>
+		<form method="POST" class="login-form">
 
-								
-								<div class="form-group">
-									<label for="name">Name</label>
-									<input id="name" type="text" class="form-control" name="name" required autofocus>
-		
-									{{ form.as_p }}
-									
-									
-									<div class="invalid-feedback">
-										What's your name?
-									</div>
-								</div>
+			<label for="lemail">Name</label>
+			<input name="lemail">
 
-								<div class="form-group">
-									<label for="email">E-Mail Address</label>
-									<input id="email" type="email" class="form-control" name="email" required>
-									<div class="invalid-feedback">
-										Your email is invalid
-									</div>
-								</div>
+			<label for="lemail">Email</label>
+			<input name="lemail"type="email">
 
-								<div class="form-group">
-									<label for="password">Password</label>
-									<input id="password" type="password" class="form-control" name="password" required data-eye>
-									<div class="invalid-feedback">
-										Password is required
-									</div>
-								</div>
+			<label for="lpassword">Password</label>
+			<input name="lpassword" type="password">
 
-								<div class="form-group">
-									<div class="custom-checkbox custom-control">
-										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
-										<label for="agree" class="custom-control-label">I agree to the <a href="#">Terms and Conditions</a></label>
-										<div class="invalid-feedback">
-											You must agree with our Terms and Conditions
-										</div>
-									</div>
-								</div>
-							
+			<label for="lpassword">Password Again</label>
+			<input name="lpassword" type="password">
 
-								<div class="form-group m-0">
-									<button type="submit" class="btn btn-primary btn-block">
-										Register
-									</button>
-								</div>
-								<div class="mt-4 text-center">
-									Already have an account? <a href="{% url 'login_custom' %}">Login</a>
-								</div>
-							</form>
-						</div>
-					</div>
-					<div class="footer">
-						Copyright &copy; 2017 &mdash; Your Company 
-					</div>
-				</div>
-			</div>
-		</div>
+			<button class="button-9">
+				Register
+			</button>
+		</form>
+
+		<hr>
+
+		<h2 style="margin-top: 2em;">Already have any Account?</h2>
+
+		<button class="button-9" style="border-radius: 40px;">
+			Login
+		</button>
+
 	</section>
-
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
