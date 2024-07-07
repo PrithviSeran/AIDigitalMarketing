@@ -6,89 +6,98 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>Document</title>
 </head>
 <body>
     <div class="whole-campaign">
         <div class="camapign-card">
             <div class="campaign-header">
-                <h2>Your Campaigns</h2>
+                <h2>{{ campaign.name }}</h2>
             </div>
+
+            <!--
+                <h1>{{ campaign.name }}</h1>
+                <p><strong>Use:</strong> WHY {{ campaign.get_use_display }}</p>
+                <p><strong>Information About Yourself:</strong> {{ campaign.user_info }}</p>
+                <p><strong>Purpose:</strong> {{ campaign.purpose }}</p>
+                <p><strong>Target Audience:</strong> {{ campaign.target_audience }}</p>
+                <p><strong>Created At:</strong> {{ campaign.created_at }}</p>
+            -->
+
             <div class="stack">
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
+                <div class="info">
+                    <h3>Purpose</h3>
+                    <p>
+                        {{ campaign.get_use_display }}
+                    </p>
+                </div>
+                <div class="info">
+                    <h3 class="raleway-test">About Yourself</h3>
+                    <p>
+                        {{ campaign.user_info }}
+                    </p>
+                </div>
+                <div class="info">
+                    <h3 class="raleway-test">Target</h3>
+                    <p>
+                        {{ campaign.target_audience }}
+                    </p>
+                </div>
             </div>
         </div>
         <div class="campaign-actions">
-            <h1 class="raleway-test"> Create a Campaign</h1>
+            <h1 class="raleway-test"> Find Online Businesses</h1>
 
-            <form method="POST" class="create-campaign-form">
-
-                <div class="name-and-selection">
-                    <div class="trivial">
-                        <label for="campaign-name">Name of the Campaign:</label>
-                        <input type="text" id="campaign-name" name="campaign-name" required> 
-                    </div>
-
-                    <div class="trivial">
-                        <label for="campaign-use">Use of the Campaign:</label>
-                        <select id="campaign-use" name="campaign-use" required>
-                            <option value="personal">Personal</option>
-                            <option value="business">Business</option>
-                        </select>
-                    </div>
-                </div>
-
-                <label for="user-info">Information About Yourself:</label>
-                <textarea id="user-info" name="user-info" rows="4" required></textarea>
-
-                <label for="campaign-purpose">Purpose of the Campaign:</label>
-                <textarea id="campaign-purpose" name="campaign-purpose" rows="4" required></textarea>
-
-                <label for="target-audience">Who Are You Trying to Target:</label>
-                <textarea id="target-audience" name="target-audience" rows="4" required></textarea>
-
-                <button type="submit" class="button-9">Create new campaign</button>
-
+            <form method = "POST" class="user-input">
+                <input>
+                
+                <button class="button-9" id="get-businesses">Get Businesses</button>
+                
             </form>
+
+            <div class="domains">
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                <button class="business">
+                    Testing
+                </button>
+                
+            </div>
         </div>
     </div>
 </body>
 </html>
-
 

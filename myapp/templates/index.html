@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
     <title>Document</title>
 </head>
 <body>
@@ -15,9 +17,12 @@
         <h2>
             Increase Your outreach within minutes.
         </h2>
-        <button class="button-9">
-            Get Started
-        </button>
+
+        <a href="{% url 'login_custom' %}">
+            <button class="button-9">
+                Get Started
+            </button>
+        </a>
 
     </section>
    

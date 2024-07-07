@@ -5,38 +5,50 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>My Login Page &mdash; Bootstrap 4 Login Page Snippet</title>
 	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 	
 </head>
 <body>
 	<section class="regitser-card">
-		<h2>Login</h2>
+		<h2>Register</h2>
 		<form method="POST" class="login-form">
 
-			<label for="lemail">Name</label>
-			<input name="lemail">
+			{% csrf_token %}
+
+			<label for="lname">Name</label>
+			{{ form.username }}
 
 			<label for="lemail">Email</label>
-			<input name="lemail"type="email">
+			{{ form.email }}
 
 			<label for="lpassword">Password</label>
-			<input name="lpassword" type="password">
+			{{ form.password1 }}
 
 			<label for="lpassword">Password Again</label>
-			<input name="lpassword" type="password">
+			{{ form.password2 }}
 
+		
 			<button class="button-9">
 				Register
 			</button>
+
+			{% for field, errors in form.errors.items %}
+    			{% for error in errors %}
+					<li style="color: red;">{{ error }}</li>
+				{% endfor %}
+			{% endfor %}
 		</form>
 
 		<hr>
 
 		<h2 style="margin-top: 2em;">Already have any Account?</h2>
 
-		<button class="button-9" style="border-radius: 40px;">
-			Login
-		</button>
+		<a href="{% url 'login_custom' %}">
+			<button class="button-9" style="border-radius: 40px;">
+				Login
+			</button>
+		</a>
 
 	</section>
 </body>

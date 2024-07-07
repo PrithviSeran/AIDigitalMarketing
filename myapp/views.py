@@ -50,7 +50,9 @@ def main(request):
 
     campaigns = Campaign.objects.all()
 
-    return render(request, "main.html", {'campaigns': campaigns})
+    print(campaigns)
+
+    return render(request, "new-main.html", {"campaigns": campaigns})
 
 
 def login_custom(request, *args, **kwargs):
@@ -94,6 +96,10 @@ def register(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect('main')
+        else:
+            #print(form)
+            return render(request, "register.html", {"form": form})
+
     else:
         form = CustomUserCreationForm()
 
@@ -138,13 +144,13 @@ def campaign(request, pk):
 
             get_businesses(request, pk, count)
 
-            return render(request, 'campaign.html', {'campaign': campaign, 'form': form})
+            return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form})
         
     else:
         form = PagesWanted()
 
 
-    return render(request, 'campaign.html', {'campaign': campaign, 'form': form})
+    return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form})
 
 
 def get_businesses(request, pk):
