@@ -6,7 +6,7 @@ from selenium import webdriver
 import sys
 sys.path.append("/Users/prithviseran/Documents/AIDigitalMarketingApp")
 import django
-from myapp.models import BusinessDomains
+#from myapp.models import BusinessDomains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -28,7 +28,7 @@ class GetBusinessWebsites(CrawlSpider):
         Rule(LinkExtractor(allow=""), callback="parse"),
     )
 
-    def __init__(self, campaign, count, *args, **kwargs):
+    def __init__(self, campaign = None, count = 2, *args, **kwargs):
         super(GetBusinessWebsites, self).__init__(*args, **kwargs)
         self.visited_domains = set()
         self.campaign = campaign
@@ -39,34 +39,42 @@ class GetBusinessWebsites(CrawlSpider):
 
     def spider_opened(self, spider):
         self.visited_domains = set()
-        self.log("Spider opened: %s" % spider.name)
+        #self.log("Spider opened: %s" % spider.name)
 
     def spider_closed(self, spider):
-        self.log("Spider closed: %s" % spider.name)
-        self.log("Total unique domains visited: %d" % len(self.visited_domains))
+        #self.log("Spider closed: %s" % spider.name)
+        #self.log("Total unique domains visited: %d" % len(self.visited_domains))
+        pass
 
     def response_received(self, response, request, spider):
 
-        if self.count == self.N:
+        print("\n\n\n\n\n\nOVER HERRREEEE")
+        print(self.N)
+        print(" \n\n\n\n\n\n\n")
+
+        if int(self.count) >= int(self.N):
+               while(1):
+                      print(self.visited_domains)
                raise CloseSpider("Max Count Reached")
 
         self.count = self.count + 1
         domain = urlparse(response.url).netloc
         self.visited_domains.add(domain)
-        #if len(self.visited_domains) >= self.N:
-        #    raise CloseSpider(f"Scraped {self.N} items. Eject!")
-        #print("\n\n\n\n\n\nOVER HERRREEEE " + str(self.domain_count) + "\n\n\n\n\n\n\n")
-        self.log(f"Visited domain: {domain}")
+        #self.log(f"Visited domain: {domain}")
         self.save_domain(domain)
 
     def save_domain(self, domain):
-        from myapp.models import BusinessDomains  # Import your model here
+        #from myapp.models import BusinessDomains  # Import your model here
+        pass
+    
+        #if domain not in self.visited_domains:
+        #        BusinessDomains.objects.create(
+        #        campaign=self.campaign,
+        #        name=domain
+        #        )
 
-        if domain not in self.visited_domains:
-                BusinessDomains.objects.create(
-                campaign=self.campaign,
-                name=domain
-                )
+
+        # return domain name and send to websocket
 
     def start_requests(self) -> Iterable[Request]:
         
@@ -88,8 +96,6 @@ class GetBusinessWebsites(CrawlSpider):
         links = driver.find_elements(By.PARTIAL_LINK_TEXT, "COVID")
 
         time.sleep(5)
-
-        
         # for link in links:
         #    print(link.get_attribute('href'))
 

@@ -37,10 +37,8 @@
                 -->
             <div class="stack">
                 {% for campaign in campaigns %}
-                    <a href="{% url 'campaign' campaign.pk %}">
-                        <button class="business">
+                    <a class="business" href="{% url 'campaign' campaign.pk %}" style="text-decoration: none; color: black; text-align: center;">
                             {{ campaign.name }}
-                        </button>
                     </a>
                 {% endfor %}
             </div>

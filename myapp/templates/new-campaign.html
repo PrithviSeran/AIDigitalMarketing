@@ -51,10 +51,11 @@
             <h1 class="raleway-test"> Find Online Businesses</h1>
 
             <form method = "POST" class="user-input">
-                <input>
+                {% csrf_token %}
+                <!-- <input placeholder="How many businesses?" type="number"> -->
+                 {{ form.count }}
                 
                 <button class="button-9" id="get-businesses">Get Businesses</button>
-                
             </form>
 
             <div class="domains">

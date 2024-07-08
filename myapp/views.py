@@ -140,7 +140,7 @@ def campaign(request, pk):
 
         if form.is_valid():
 
-            count = form.count
+            count = form['count'].value()
 
             get_businesses(request, pk, count)
 
@@ -153,12 +153,12 @@ def campaign(request, pk):
     return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form})
 
 
-def get_businesses(request, pk):
+def get_businesses(request, pk, count):
     campaign = get_object_or_404(Campaign, pk=pk)
 
-    #process = CrawlerProcess(get_project_settings())
-    #process.crawl(GetBusinessWebsites, campaign = campaign, count = count)
-    #process.start()
+    process = CrawlerProcess(get_project_settings())
+    process.crawl(GetBusinessWebsites, campaign = campaign, count = count)
+    process.start()
 
     domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
     #print(stored_data_set)
@@ -185,3 +185,4 @@ def generate_emails(request, pk):
     # Add your email generation logic here
     data = "Emails generated"
     return JsonResponse({'data': data})
+
