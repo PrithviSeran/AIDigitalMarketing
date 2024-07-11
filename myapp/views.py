@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from scrapy.crawler import CrawlerProcess
@@ -9,7 +10,7 @@ from .forms import MyForm, CustomUserCreationForm, PagesWanted
 from django.contrib.auth import views as auth_views
 from .forms import CampaignForm
 from .models import Campaign, BusinessDomains
-from django.http import JsonResponse
+from scrapy.exceptions import CloseSpider
 
 
 # Create your views here.
@@ -17,32 +18,6 @@ from django.http import JsonResponse
 def home(request):
 
     return render(request, "index.html")
-
-
-def my_form_view(request):
-    if request.method == 'POST':
-        form = MyForm(request.POST)
-        if form.is_valid():
-            # Process the data in form.cleaned_data as required
-            # For example, save the data to the database
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            message = form.cleaned_data['message']
-
-            process = CrawlerProcess(get_project_settings())
-            process.crawl(GetBusinessWebsites)
-            process.start()
-
-            print(name)
-            print(email)
-            print(message)
-
-            # Redirect to a new URL or render a success template
-            return render(request, 'base.html')
-    else:
-        form = MyForm()
-
-    return render(request, 'form_template.html', {'form': form})
 
 
 @login_required
@@ -131,58 +106,41 @@ def campaign(request, pk):
 
     campaign = get_object_or_404(Campaign, pk=pk) #for all the records 
 
-    print(request.method)
+    domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
 
-    if request.method == 'POST':
-        form = PagesWanted(request.POST)
-        
-        print(form.is_valid())
+    domains = set()
 
-        if form.is_valid():
+    for business in domains_for_campaign:
+            domains.add(business.name)
 
-            count = form['count'].value()
+    form = PagesWanted()
 
-            get_businesses(request, pk, count)
-
-            return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form})
-        
-    else:
-        form = PagesWanted()
-
-
-    return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form})
+    return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form, 'domains': domains})
 
 
 def get_businesses(request, pk, count):
+
     campaign = get_object_or_404(Campaign, pk=pk)
 
     process = CrawlerProcess(get_project_settings())
     process.crawl(GetBusinessWebsites, campaign = campaign, count = count)
-    process.start()
+    #process.start()
+    
 
     domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
     #print(stored_data_set)
 
-    print(domains_for_campaign)
+    visited_domains = set()
 
     for business in domains_for_campaign:
-        print(f"Domain: {business.name}")
-        #print(f"Name: {business.name}")
-        #print(f"Content: {business.content}")
-        print("------")
-    
-
-    #print(campaign)
-
-    # Add your business logic here
-    data = "Business data related to the campaign"
-    return JsonResponse({'data': data})
+            visited_domains.add(business.name)
 
 
-@csrf_exempt
-def generate_emails(request, pk):
-    campaign = get_object_or_404(Campaign, pk=pk)
-    # Add your email generation logic here
-    data = "Emails generated"
-    return JsonResponse({'data': data})
+    return visited_domains
+
+
+def testAPI(request):
+    print("API WORKS!!!!")
+
+    return HttpResponse("Please")
 

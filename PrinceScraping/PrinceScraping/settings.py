@@ -12,11 +12,11 @@ import django
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 # Set up Django's settings module
-#sys.path.append(os.path.dirname(os.path.abspath('.')))
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'AIDigitalMarketingApp.settings'
+sys.path.append(os.path.dirname(os.path.abspath('.')))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'AIDigitalMarketingApp.settings'
 
 # Initialize Django
-#django.setup()
+django.setup()
 
 BOT_NAME = "PrinceScraping"
 

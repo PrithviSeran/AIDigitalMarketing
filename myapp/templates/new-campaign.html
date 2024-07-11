@@ -57,48 +57,63 @@
                 
                 <button class="button-9" id="get-businesses">Get Businesses</button>
             </form>
+            <button id="myButton">Click Me!</button>
 
             <div class="domains">
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                <button class="business">
-                    Testing
-                </button>
-                
+                {% for domain in domains %}
+                    <a class="business" style="text-decoration: none; color: black; text-align: center;">
+                            {{ domain }}
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <h1 id="app">{{ text }}</h1>
+        </div>
+    </div>
+    <script>
+        const button = document.getElementById('myButton');
+
+        // Add a click event listener to the button
+        button.addEventListener('click', () => {
+            socket.send(JSON.stringify({ message: 'Hello, server!' }));
+        })
+
+        const socket = new WebSocket('ws://localhost:8000/ws/ok/');
+
+        const containers = document.querySelectorAll('.domains');
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log('Message from server:', data.message);
+            const items = data.message;
+
+            // Loop through each container
+            containers.forEach((container, index) => {
+                // Loop through the items array
+                items.forEach(item => {
+                    // Create a new <p> element
+                    const newElement = document.createElement('a');
+
+                    // Set the text content of the <p> element
+                    newElement.textContent = item;
+
+                    newElement.classList.add('business');
+
+                    newElement.style.color = 'black';
+                    newElement.style.textAlign = 'center';
+
+                
+
+                    // Add the new <p> element to the container
+                    container.appendChild(newElement);
+                });
+            });
+        };
+        
+    </script>
 </body>
 </html>
 

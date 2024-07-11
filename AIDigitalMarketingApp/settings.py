@@ -29,10 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -117,6 +119,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+ASGI_APPLICATION = 'AIDigitalMarketingApp.asgi.application'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -137,7 +140,7 @@ STATICFILES_DIRS = [
 ]
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-ASGI_APPLICATION = "core.routing.application"
+#ASGI_APPLICATION = "core.routing.application"
 CHANNEL_LAYERS = {
     "default" : {
         "BACKEND": "channels.layers.InMemoryChannelLayer"

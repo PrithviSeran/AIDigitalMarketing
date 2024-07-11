@@ -1,45 +1,53 @@
+from channels.generic.websocket import WebsocketConsumer
+from random import randint
+from time import sleep
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer
+from .models import Campaign, BusinessDomains
+from scrapy.crawler import CrawlerProcess
+from django.shortcuts import get_object_or_404
+from scrapy.utils.project import get_project_settings
+from PrinceScraping.PrinceScraping.spiders.get_businesses import GetBusinessWebsites
 
-class ChatRoomConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
 
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
 
-        await self.accept()
 
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
+class WSConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+  
 
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        username = text_data_json['username']
+        #for i in range(1000):
+        #    self.send(json.dumps({'message': randint(1, 100)}))
+        #    sleep(1)
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chatroom_message',
-                'message': message,
-                'username': username,
-            }
-        )
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        message = data['message']
 
-    async def chatroom_message(self, event):
-        message = event['message']
-        username = event['username']
+        print("You are a Genius!")
 
-        await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username,
+        campaign = get_object_or_404(Campaign, pk=1)
+
+        process = CrawlerProcess(get_project_settings())
+        process.crawl(GetBusinessWebsites, campaign = campaign, count = 1)
+        #process.start()
+        
+
+        domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
+        #print(stored_data_set)
+
+        visited_domains = set()
+
+        for business in domains_for_campaign:
+                visited_domains.add(business.name)
+
+        print("DOMAINS: \n")
+        print(visited_domains)
+
+        # Send a response back to the client
+        self.send(text_data=json.dumps({
+            'message': list(visited_domains)
         }))
 
-    pass
+ 
