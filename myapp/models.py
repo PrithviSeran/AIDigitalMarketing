@@ -4,6 +4,9 @@ import json
 
 # Create your models here.
 class Campaign(models.Model):
+    class Meta:
+        managed = True
+
     CAMPAIGN_USE_CHOICES = [
         ('personal', 'Personal'),
         ('business', 'Business'),
@@ -22,7 +25,14 @@ class Campaign(models.Model):
     
 
 class BusinessDomains(models.Model):
+    class Meta:
+        managed = True
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='businesses')
     name = models.CharField(max_length=100, default="default_name")
 
-    
+
+class NewBusinessDomains(models.Model):
+    class Meta:
+        managed = True
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='newbusinesses')
+    name = models.CharField(max_length=100, default="default_name")

@@ -6,7 +6,7 @@ from selenium import webdriver
 import sys
 sys.path.append("/Users/prithviseran/Documents/AIDigitalMarketingApp")
 import django
-from myapp.models import BusinessDomains
+from myapp.models import BusinessDomains, NewBusinessDomains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -23,6 +23,7 @@ class GetBusinessWebsites(CrawlSpider):
     count = 0
     N = 0
     domain_count = 0
+    new_domains = []
 
     rules = (
         Rule(LinkExtractor(allow=""), callback="parse"),
@@ -38,9 +39,6 @@ class GetBusinessWebsites(CrawlSpider):
         for business in domains_for_campaign:
                 self.visited_domains.add(business.name)
 
-        print("In The INNIT")
-        print(self.visited_domains)
-
         self.campaign = campaign
         self.N = N
         dispatcher.connect(self.spider_opened, signal=signals.spider_opened)
@@ -48,8 +46,9 @@ class GetBusinessWebsites(CrawlSpider):
         dispatcher.connect(self.response_received, signal=signals.response_received)
 
     def spider_opened(self, spider):
-        self.visited_domains = set()
+        #self.visited_domains = set()
         #self.log("Spider opened: %s" % spider.name)
+        pass
 
     def spider_closed(self, spider):
         #self.log("Spider closed: %s" % spider.name)
@@ -61,10 +60,20 @@ class GetBusinessWebsites(CrawlSpider):
 
     def save_domain(self, domain):
 
-        item = BusinessDomains()
-        item.campaign = self.campaign
-        item.name = domain
-        item.save()
+        my_model_instance = BusinessDomains(
+             campaign = 1,
+             name = "Please Work"
+        )
+
+        my_model_instance.save()
+
+
+    def save_new_domain(self, domain):
+        NewBusinessDomains.objects.filter(campaign=self.campaign).update_or_create(
+               campaign = self.campaign,
+               name=domain
+        )
+
 
     def start_requests(self) -> Iterable[Request]:
         
@@ -116,10 +125,18 @@ class GetBusinessWebsites(CrawlSpider):
         domain = urlparse(response.url).netloc
 
         if domain not in list(self.visited_domains):
+
+                print("Actual Domain")
+                print(domain)
+
+                print("List of Domains")
+                print(list(self.visited_domains))
         
                 self.count = int(self.count) + 1
                 self.save_domain(domain)
                 self.visited_domains.add(domain)
+                self.new_domains.append(domain)
+                #self.save_new_domain(domain)# findahealthcenter.hrsa.gov
 
                 # Alternatively, you can use XPath
                 para_texts = response.xpath('*//p/text()').getall()

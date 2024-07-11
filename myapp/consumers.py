@@ -3,7 +3,7 @@ from random import randint
 from time import sleep
 import json
 from channels.generic.websocket import WebsocketConsumer
-from .models import Campaign, BusinessDomains
+from .models import Campaign, BusinessDomains, NewBusinessDomains
 from scrapy.crawler import CrawlerProcess
 from django.shortcuts import get_object_or_404
 from scrapy.utils.project import get_project_settings
@@ -22,32 +22,28 @@ class WSConsumer(WebsocketConsumer):
         #    sleep(1)
 
     def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data['message']
-
-        print("You are a Genius!")
 
         campaign = get_object_or_404(Campaign, pk=1)
 
         process = CrawlerProcess(get_project_settings())
-        process.crawl(GetBusinessWebsites, campaign = campaign, count = 1)
-        #process.start()
+        process.crawl(GetBusinessWebsites, campaign = campaign, N = 1)
+        process.start()
         
-
-        domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
+        new_domains = BusinessDomains.objects.filter(campaign=1)
         #print(stored_data_set)
 
-        visited_domains = set()
+        visited_domains = []
 
-        for business in domains_for_campaign:
-                visited_domains.add(business.name)
+        for business in new_domains:
+            visited_domains.append(business.name)
+
 
         print("DOMAINS: \n")
         print(visited_domains)
 
         # Send a response back to the client
         self.send(text_data=json.dumps({
-            'message': list(visited_domains)
+            'message': visited_domains
         }))
 
  

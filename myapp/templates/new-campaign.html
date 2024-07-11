@@ -76,12 +76,12 @@
     <script>
         const button = document.getElementById('myButton');
 
+        const socket = new WebSocket('ws://localhost:8000/ws/ok/');
+
         // Add a click event listener to the button
         button.addEventListener('click', () => {
             socket.send(JSON.stringify({ message: 'Hello, server!' }));
         })
-
-        const socket = new WebSocket('ws://localhost:8000/ws/ok/');
 
         const containers = document.querySelectorAll('.domains');
 
@@ -92,8 +92,16 @@
 
             // Loop through each container
             containers.forEach((container, index) => {
+                const links = container.querySelectorAll('a');
+
+                // Loop through the <a> elements and remove each one
+                links.forEach(link => {
+                    link.remove();
+                });
+
                 // Loop through the items array
                 items.forEach(item => {
+                    
                     // Create a new <p> element
                     const newElement = document.createElement('a');
 
@@ -104,8 +112,6 @@
 
                     newElement.style.color = 'black';
                     newElement.style.textAlign = 'center';
-
-                
 
                     // Add the new <p> element to the container
                     container.appendChild(newElement);

@@ -25,7 +25,29 @@ def main(request):
 
     campaigns = Campaign.objects.all()
 
-    print(campaigns)
+    if request.method == 'POST':
+        form = Campaign()
+
+        '''
+        user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+        name = models.CharField(max_length=100)
+        use = models.CharField(max_length=10, choices=CAMPAIGN_USE_CHOICES)
+        user_info = models.TextField()
+        purpose = models.TextField()
+        target_audience = models.TextField()
+        created_at = models.DateTimeField(auto_now_add=True)
+        '''
+
+        form.name = request.POST.get('campaign-name')
+        form.use = request.POST.get('campaign-use')
+        form.user_info = request.POST.get('user-info')
+        form.purpose = request.POST.get('campaign-purpose')
+        form.target_audience = request.POST.get('target-audience')
+
+        form.save()
+
+        return render(request, "new-main.html", {"campaigns": campaigns})
+
 
     return render(request, "new-main.html", {"campaigns": campaigns})
 
@@ -105,6 +127,7 @@ def create_campaign(request):
 def campaign(request, pk):
 
     campaign = get_object_or_404(Campaign, pk=pk) #for all the records 
+
 
     domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
 

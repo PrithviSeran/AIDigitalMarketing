@@ -48,6 +48,7 @@
             <h1 class="raleway-test"> Create a Campaign</h1>
 
             <form method="POST" class="create-campaign-form">
+                {% csrf_token %}
 
                 <div class="name-and-selection">
                     <div class="trivial">
