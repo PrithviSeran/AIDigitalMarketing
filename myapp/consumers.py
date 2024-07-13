@@ -27,9 +27,9 @@ class WSConsumer(WebsocketConsumer):
 
         process = CrawlerProcess(get_project_settings())
         process.crawl(GetBusinessWebsites, campaign = campaign, N = 1)
-        process.start()
+        #process.start()
         
-        new_domains = BusinessDomains.objects.filter(campaign=1)
+        new_domains = BusinessDomains.objects.filter(campaign=campaign)
         #print(stored_data_set)
 
         visited_domains = []

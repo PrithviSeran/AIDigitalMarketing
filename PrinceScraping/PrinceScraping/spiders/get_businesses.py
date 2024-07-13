@@ -5,8 +5,7 @@ from scrapy.linkextractors import LinkExtractor
 from selenium import webdriver
 import sys
 sys.path.append("/Users/prithviseran/Documents/AIDigitalMarketingApp")
-import django
-from myapp.models import BusinessDomains, NewBusinessDomains
+#from myapp.models import BusinessDomains, NewBusinessDomains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -23,6 +22,7 @@ class GetBusinessWebsites(CrawlSpider):
     count = 0
     N = 0
     domain_count = 0
+    allowed_domains = ["www.cdc.gov"]
     new_domains = []
 
     rules = (
@@ -32,12 +32,12 @@ class GetBusinessWebsites(CrawlSpider):
     def __init__(self, campaign = None, N = 2, *args, **kwargs):
         super(GetBusinessWebsites, self).__init__(*args, **kwargs)
 
-        domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
+        #domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
 
         self.visited_domains = set()
 
-        for business in domains_for_campaign:
-                self.visited_domains.add(business.name)
+        #for business in domains_for_campaign:
+        #        self.visited_domains.add(business.name)
 
         self.campaign = campaign
         self.N = N
@@ -60,19 +60,14 @@ class GetBusinessWebsites(CrawlSpider):
 
     def save_domain(self, domain):
 
-        my_model_instance = BusinessDomains(
-             campaign = 1,
-             name = "Please Work"
-        )
 
-        my_model_instance.save()
+        #my_model_instance = BusinessDomains(
+        #     campaign = self.campaign,
+        #     name = "Please Please Work"
+        #)
 
-
-    def save_new_domain(self, domain):
-        NewBusinessDomains.objects.filter(campaign=self.campaign).update_or_create(
-               campaign = self.campaign,
-               name=domain
-        )
+        #my_model_instance.save()
+        pass
 
 
     def start_requests(self) -> Iterable[Request]:
@@ -113,14 +108,24 @@ class GetBusinessWebsites(CrawlSpider):
         return requests #requests #super().start_requests()
     
     def parse(self, response):
+        # Extract data from the response
+        item = {'url': response.url, 'title': response.xpath('//title/text()').get()}
+        yield item
+"""
+    def parse(self, response):
 
         print(self.count)
         print(int(self.N))
         print("\n")
 
         if int(self.count) >= int(self.N):
-               print("Exception Called")
-               raise CloseSpider("Max Count Reached")
+                print("Exception Called")
+                my_model_instance = BusinessDomains(
+                        campaign = self.campaign,
+                        name = "Please Again Please Work"
+                )
+                my_model_instance.save()
+                raise CloseSpider("Max Count Reached")
         
         domain = urlparse(response.url).netloc
 
@@ -255,4 +260,4 @@ class GetBusinessWebsites(CrawlSpider):
                 with open(completeName + '.txt', 'a') as f:
                         for text in all_text:
                                 f.write(text.strip())
-        
+"""

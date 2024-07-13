@@ -126,7 +126,7 @@ def create_campaign(request):
 
 def campaign(request, pk):
 
-    campaign = get_object_or_404(Campaign, pk=pk) #for all the records 
+    campaign = get_object_or_404(Campaign, pk=1) #for all the records 
 
 
     domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
