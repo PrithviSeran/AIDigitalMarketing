@@ -5,80 +5,47 @@ from scrapy.linkextractors import LinkExtractor
 from selenium import webdriver
 import sys
 sys.path.append("/Users/prithviseran/Documents/AIDigitalMarketingApp")
-#from myapp.models import BusinessDomains, NewBusinessDomains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from scrapy.exceptions import CloseSpider
 import time
-from scrapy import signals
-from scrapy.signalmanager import dispatcher
-from urllib.parse import urlparse
-import os
+from PrinceScraping.PrinceScraping.items import PrincescrapingItem
 
 class GetBusinessWebsites(CrawlSpider):
     name = "princecrawler"
-    count = 0
-    N = 0
-    domain_count = 0
-    allowed_domains = ["www.cdc.gov"]
-    new_domains = []
+
+    # These are the urls that we will start scraping
+    start_urls = ['https://www.chocolate.co.uk']
+    #allowed_domains = ["www.chocolate.co.uk"]
 
     rules = (
         Rule(LinkExtractor(allow=""), callback="parse"),
     )
 
-    def __init__(self, campaign = None, N = 2, *args, **kwargs):
-        super(GetBusinessWebsites, self).__init__(*args, **kwargs)
+    def parse(self, response):
+       #products = response.css('product-item')
 
-        #domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
+        business_domain = PrincescrapingItem()
 
-        self.visited_domains = set()
+        business_domain['title'] = response.xpath('//title/text()').get()
+        business_domain['url'] = response.url
 
-        #for business in domains_for_campaign:
-        #        self.visited_domains.add(business.name)
+        yield business_domain
 
-        self.campaign = campaign
-        self.N = N
-        dispatcher.connect(self.spider_opened, signal=signals.spider_opened)
-        dispatcher.connect(self.spider_closed, signal=signals.spider_closed)
-        dispatcher.connect(self.response_received, signal=signals.response_received)
+       #next_page = response.css('[rel="next"] x:attr(href)').get()
 
-    def spider_opened(self, spider):
-        #self.visited_domains = set()
-        #self.log("Spider opened: %s" % spider.name)
-        pass
-
-    def spider_closed(self, spider):
-        #self.log("Spider closed: %s" % spider.name)
-        #self.log("Total unique domains visited: %d" % len(self.visited_domains))
-        pass
-
-    def response_received(self, response, request, spider):
-        pass
-
-    def save_domain(self, domain):
+       #if next_page is not None:
+       #    next_page_url = 'https://www.chocolate.co.uk' + next_page
+       #    yield response.follow(next_page_url, callback=self.parse)
 
 
-        #my_model_instance = BusinessDomains(
-        #     campaign = self.campaign,
-        #     name = "Please Please Work"
-        #)
-
-        #my_model_instance.save()
-        pass
-
-
+    """
     def start_requests(self) -> Iterable[Request]:
         
         driver = webdriver.Chrome()
         
         driver.get("https://www.google.com")
-
-        #WebDriverWait(driver, 5).until(
-        #    EC.presence_of_all_elements_located((By.NAME, "gLFyf"))
-        #)
 
         input_element = driver.find_element(By.NAME, "q")
         input_element.send_keys("testing" + Keys.ENTER)
@@ -90,27 +57,33 @@ class GetBusinessWebsites(CrawlSpider):
         links = driver.find_elements(By.PARTIAL_LINK_TEXT, "COVID")
 
         time.sleep(5)
-        # for link in links:
-        #    print(link.get_attribute('href'))
 
         requests = []
         
-        
         for link in links:
-            #print("\n\n\n\n\n\nOVER HERRREEEE " + link.get_attribute('href') + "\n\n\n\n\n\n\n")
-            #print(link.get_attribute('href'))
             requests.append(Request(link.get_attribute('href')))
 
         self.domain_count = self.domain_count + 1
         
         driver.quit()
 
-        return requests #requests #super().start_requests()
-    
+        return requests 
+    """
+        
+    """
     def parse(self, response):
         # Extract data from the response
-        item = {'url': response.url, 'title': response.xpath('//title/text()').get()}
-        yield item
+        business_domain = PrincescrapingItem()
+
+        business_domain['title'] = response.xpath('//title/text()').get()
+        business_domain['url'] = response.url
+
+        yield business_domain
+        """
+
+
+
+
 """
     def parse(self, response):
 

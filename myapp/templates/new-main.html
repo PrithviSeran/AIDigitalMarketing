@@ -16,28 +16,10 @@
             <div class="campaign-header">
                 <h2>Your Campaigns</h2>
             </div>
-                    <!--
-        
-                <div class="campaigns">
-                    <h1>Campaign List</h1>
-                    <ul>
-                        {% for campaign in campaigns %}
-                            <li>
-                                <a href="{% url 'campaign' campaign.pk %}">{{ campaign.name }}</a><br>
-                                Use: {{ campaign.get_use_display }}<br>
-                                Information About Yourself: {{ campaign.user_info }}<br>
-                                Purpose: {{ campaign.purpose }}<br>
-                                Target Audience: {{ campaign.target_audience }}<br>
-                                Created At: {{ campaign.created_at }}<br>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                
-                -->
+                    
             <div class="stack">
                 {% for campaign in campaigns %}
-                    <a class="business" href="{% url 'campaign' campaign.pk %}" style="text-decoration: none; color: black; text-align: center;">
+                    <a class="business" href="{% url 'campaign' campaign.name %}" style="text-decoration: none; color: black; text-align: center;">
                             {{ campaign.name }}
                     </a>
                 {% endfor %}

@@ -9,11 +9,15 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import MyForm, CustomUserCreationForm, PagesWanted
 from django.contrib.auth import views as auth_views
 from .forms import CampaignForm
-from .models import Campaign, BusinessDomains
+from .models import BusinessDomains
+from .models import NewCampaign as Campaign
 from scrapy.exceptions import CloseSpider
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
-# Create your views here.
+#CURRENT USER
+
 
 def home(request):
 
@@ -23,21 +27,14 @@ def home(request):
 @login_required
 def main(request):
 
-    campaigns = Campaign.objects.all()
+    user =  User.objects.get(username=request.user)
+
+    campaigns = Campaign.objects.filter(user = user)
 
     if request.method == 'POST':
         form = Campaign()
 
-        '''
-        user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-        name = models.CharField(max_length=100)
-        use = models.CharField(max_length=10, choices=CAMPAIGN_USE_CHOICES)
-        user_info = models.TextField()
-        purpose = models.TextField()
-        target_audience = models.TextField()
-        created_at = models.DateTimeField(auto_now_add=True)
-        '''
-
+        form.user = user
         form.name = request.POST.get('campaign-name')
         form.use = request.POST.get('campaign-use')
         form.user_info = request.POST.get('user-info')
@@ -57,9 +54,6 @@ def login_custom(request, *args, **kwargs):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        print(email)
-        print(password)
 
         user = authenticate(username=email, password=password)
 
@@ -84,7 +78,9 @@ def login_custom(request, *args, **kwargs):
 def register(request):
 
     if request.method == 'POST':
+
         form = CustomUserCreationForm(request.POST)
+
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -94,7 +90,6 @@ def register(request):
             login(request, user)
             return redirect('main')
         else:
-            #print(form)
             return render(request, "register.html", {"form": form})
 
     else:
@@ -111,12 +106,11 @@ def logout_view(request):
 def create_campaign(request):
     if request.method == 'POST':
         form = CampaignForm(request.POST)
-        print(form.is_valid())
+
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.user = request.user
             campaign.save()
-            print("here?????")
             return redirect('campaign')  # Replace 'success_page' with your desired redirect URL
     else:
         form = CampaignForm()
@@ -124,12 +118,13 @@ def create_campaign(request):
     return render(request, 'create_campaign.html', {'form': form})
 
 
-def campaign(request, pk):
+def campaign(request, name):
 
-    campaign = get_object_or_404(Campaign, pk=1) #for all the records 
+    campaign = get_object_or_404(Campaign, name=name)#for all the records 
 
+    #campaign.save()
 
-    domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
+    domains_for_campaign = BusinessDomains.objects.filter(campaign_id = campaign.id)
 
     domains = set()
 
@@ -147,23 +142,13 @@ def get_businesses(request, pk, count):
 
     process = CrawlerProcess(get_project_settings())
     process.crawl(GetBusinessWebsites, campaign = campaign, count = count)
-    #process.start()
-    
 
     domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
-    #print(stored_data_set)
 
     visited_domains = set()
 
     for business in domains_for_campaign:
             visited_domains.add(business.name)
 
-
     return visited_domains
-
-
-def testAPI(request):
-    print("API WORKS!!!!")
-
-    return HttpResponse("Please")
 

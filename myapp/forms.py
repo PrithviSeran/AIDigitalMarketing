@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Campaign
+from .models import NewCampaign as Campaign
 
 class MyForm(forms.Form):
     name = forms.CharField(label='Your Name', max_length=100)

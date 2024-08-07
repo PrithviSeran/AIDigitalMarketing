@@ -13,15 +13,15 @@ import django
 
 # Set up Django's settings module
 #sys.path.append(os.path.dirname(os.path.abspath('.')))
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'AIDigitalMarketingApp.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'AIDigitalMarketingApp.settings'
 
 # Initialize Django
-#django.setup()
+django.setup()
 
-BOT_NAME = "PrinceScraping"
+BOT_NAME = "PrinceScraping.PrinceScraping"
 
-SPIDER_MODULES = ["PrinceScraping.spiders"]
-NEWSPIDER_MODULE = "PrinceScraping.spiders"
+SPIDER_MODULES = ["PrinceScraping.PrinceScraping.spiders"]
+NEWSPIDER_MODULE = "PrinceScraping.PrinceScraping.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -73,9 +73,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "PrinceScraping.pipelines.PrincescrapingPipeline": 300,
-#}
+ITEM_PIPELINES = {
+    "PrinceScraping.PrinceScraping.pipelines.SavingToPostgresPipeline": 100
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -99,6 +99,6 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
 # Set settings whose default value is deprecated to a future-proof value
-REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+#REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
+#TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
