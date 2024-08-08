@@ -32,8 +32,12 @@ class WSConsumer(WebsocketConsumer):
         print(inspect.iscoroutinefunction(process))
         #process.start()
 
-        while(1):
-            continue
+        f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
+        status = f.read()
+
+        while(status == "false"):
+            f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
+            status = f.read()
 
         print("WHYYYYYYYYYYYYYYYYY")
         
@@ -45,7 +49,7 @@ class WSConsumer(WebsocketConsumer):
             visited_domains.append(business.name)
 
         self.send(text_data=json.dumps({
-            'message': "Is this Why?"
+            'message': visited_domains
         }))
 
  

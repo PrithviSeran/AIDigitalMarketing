@@ -31,9 +31,13 @@ class SavingToPostgresPipeline(object):
         print(item)
         self.store_db(item)
         return item
+    
+    def close_spider(self, item):
+        f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "w")
+        f.write("true")
+        f.close()
 
     def store_db(self, item):
-        #self.curr.execute(""" INSERT INTO myapp_businessdomains
-                             # VALUES ('please', 2);""")
-        #self.conn.commit()
-        pass
+        self.curr.execute(""" INSERT INTO myapp_businessdomains VALUES ('please work', 2);""")
+        self.conn.commit()
+
