@@ -8,6 +8,7 @@ import scrapy
 
 class PrincescrapingItem(scrapy.Item):
     # define the fields for your item here like:
-    title = scrapy.Field()
+    campaign_id = scrapy.Field()
+    name = scrapy.Field()
     url = scrapy.Field()
 

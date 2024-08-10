@@ -11,25 +11,36 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from PrinceScraping.PrinceScraping.items import PrincescrapingItem
+from scrapy.exceptions import CloseSpider
 
 class GetBusinessWebsites(CrawlSpider):
     name = "princecrawler"
-
-    # These are the urls that we will start scraping
     start_urls = ['https://www.chocolate.co.uk']
-    #allowed_domains = ["www.chocolate.co.uk"]
+    campaign_id = 0
+    scraped_pages = 0
 
     rules = (
         Rule(LinkExtractor(allow=""), callback="parse"),
     )
 
+    def __init__(self, campaign_id, N = 1, *args, **kwargs):
+        super(GetBusinessWebsites, self).__init__(*args, **kwargs)
+
+        self.campaign_id = campaign_id
+        self.N = N
+
     def parse(self, response):
-       #products = response.css('product-item')
+
+        if self.N <= self.scraped_pages:
+            raise CloseSpider(reason='Max Number Reacher')
 
         business_domain = PrincescrapingItem()
 
-        business_domain['title'] = response.xpath('//title/text()').get()
+        business_domain['campaign_id'] = self.campaign_id
+        business_domain['name'] = response.xpath('//title/text()').get()
         business_domain['url'] = response.url
+
+        self.scraped_pages =+ 1
 
         yield business_domain
 

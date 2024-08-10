@@ -38,6 +38,11 @@ class SavingToPostgresPipeline(object):
         f.close()
 
     def store_db(self, item):
-        self.curr.execute(""" INSERT INTO myapp_businessdomains VALUES ('please work', 2);""")
+
+        campaign_id = item.get("campaign_id")
+        name = item.get("name")
+        url = item.get("url")
+
+        self.curr.execute(f""" INSERT INTO myapp_businessdomains (name, campaign_id, url) VALUES ({name}, {campaign_id}, {url});""")
         self.conn.commit()
 

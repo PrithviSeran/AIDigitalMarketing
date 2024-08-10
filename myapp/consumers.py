@@ -20,17 +20,15 @@ class WSConsumer(WebsocketConsumer):
         self.accept()
   
 
-    def receive(self, text_data):
+    def receive(self, campaign_name):
 
-        campaign = get_object_or_404(Campaign, name="Why")
+        campaign = get_object_or_404(Campaign, name = campaign_name)
 
         crawler_settings = Settings()
         crawler_settings.setmodule(my_settings)
 
         process = CrawlerProcess(settings=crawler_settings)
         process.crawl(GetBusinessWebsites)
-        print(inspect.iscoroutinefunction(process))
-        #process.start()
 
         f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
         status = f.read()
@@ -39,9 +37,8 @@ class WSConsumer(WebsocketConsumer):
             f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
             status = f.read()
 
-        print("WHYYYYYYYYYYYYYYYYY")
         
-        new_domains = BusinessDomains.objects.filter(campaign_id=2)
+        new_domains = BusinessDomains.objects.filter(campaign_id=campaign.id)
 
         visited_domains = []
 
