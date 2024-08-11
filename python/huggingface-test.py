@@ -35,3 +35,9 @@ for message in client.chat_completion(
 	stream=True,
 ):
     print(message.choices[0].delta.content, end="")
+
+# Use a pipeline as a high-level helper
+
+#pipe = pipeline("text-generation", model="meta-llama/Meta-Llama-3.1-405B")
+
+#pipe("How Are you")

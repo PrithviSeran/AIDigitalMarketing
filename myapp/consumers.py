@@ -11,8 +11,6 @@ from django.shortcuts import get_object_or_404
 from scrapy.settings import Settings
 from PrinceScraping.PrinceScraping.spiders.get_businesses import GetBusinessWebsites
 from PrinceScraping.PrinceScraping import settings as my_settings
-import inspect
-
 
 
 class WSConsumer(WebsocketConsumer):
@@ -22,11 +20,6 @@ class WSConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
 
-        #print(text_data)
-        #print(type(text_data))
-
-        #print(numofBusiness)
-
         text_data = json.loads(text_data)
 
         campaign = text_data["message"]
@@ -34,18 +27,11 @@ class WSConsumer(WebsocketConsumer):
 
         campaign = get_object_or_404(Campaign, name = campaign)
 
-        print("Campaign ID: \n")
-        print(campaign.id)
-
         crawler_settings = Settings()
         crawler_settings.setmodule(my_settings)
 
         process = CrawlerProcess(settings=crawler_settings)
-        process.crawl(GetBusinessWebsites, campaign_id = campaign.id, N = int(N))
-
-        #f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "w")
-        #f.write("false")
-        #f.close()
+        process.crawl(GetBusinessWebsites, campaign_id = campaign.id, N = int(N), target_audience = campaign.target_audience)
 
         f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
         status = f.read()
