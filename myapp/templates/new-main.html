@@ -9,7 +9,7 @@
                     
             <div class="stack">
                 {% for campaign in campaigns %}
-                    <a class="business" href="{% url 'campaign' campaign.name %}" style="text-decoration: none; color: black; text-align: center;">
+                    <a class="business" href="{% url 'campaign' campaign.id %}" style="text-decoration: none; color: black; text-align: center;">
                             {{ campaign.name }}
                     </a>
                 {% endfor %}

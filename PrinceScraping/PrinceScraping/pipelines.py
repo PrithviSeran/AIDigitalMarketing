@@ -6,6 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from scrapy.exceptions import CloseSpider
 import psycopg2
 
 class PrincescrapingPipeline:
@@ -16,6 +17,8 @@ class SavingToPostgresPipeline(object):
 
     def __init__(self):
         self.create_connection()
+        self.N = 0
+        self.count = 0
 
     def create_connection(self):
         self.conn = psycopg2.connect(
@@ -28,8 +31,23 @@ class SavingToPostgresPipeline(object):
         self.curr = self.conn.cursor()
 
     def process_item(self, item, spider):
-        print(item)
-        self.store_db(item)
+
+        if spider.N <= self.count:
+            raise CloseSpider(reason='Max Number Reacher')
+
+        self.curr.execute(f"""SELECT name FROM myapp_businessdomains WHERE campaign_id = {spider.campaign_id};""")
+
+        result = self.curr.fetchall()
+
+        result = [x[0] for x in result] 
+
+        undo_string = item.get("name").replace("''", "'")
+        # [(166,), (167,)]
+
+        if undo_string  not in result:
+            self.count += 1
+            self.store_db(item)
+
         return item
     
     def close_spider(self, item):
@@ -43,6 +61,6 @@ class SavingToPostgresPipeline(object):
         name = item.get("name")
         url = item.get("url")
 
-        self.curr.execute(f""" INSERT INTO myapp_businessdomains (name, campaign_id, url) VALUES ({name}, {campaign_id}, {url});""")
+        self.curr.execute(f""" INSERT INTO myapp_businessdomains (name, campaign_id, url) VALUES ('{name}', {campaign_id}, '{url}');""")
         self.conn.commit()
 

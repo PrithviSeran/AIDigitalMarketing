@@ -118,37 +118,18 @@ def create_campaign(request):
     return render(request, 'create_campaign.html', {'form': form})
 
 
-def campaign(request, name):
+def campaign(request, id):
 
-    campaign = get_object_or_404(Campaign, name=name)#for all the records 
+    campaign = get_object_or_404(Campaign, id=id)#for all the records 
 
-    #campaign.save()
+    domains = BusinessDomains.objects.filter(campaign_id = id)
 
-    domains_for_campaign = BusinessDomains.objects.filter(campaign_id = campaign.id)
+    #for business in domains_for_campaign:
+    #        domains.append(business.name)
 
-    domains = set()
-
-    for business in domains_for_campaign:
-            domains.add(business.name)
-
-    form = PagesWanted()
-
-    return render(request, 'new-campaign.html', {'campaign': campaign, 'form': form, 'domains': domains})
+    return render(request, 'new-campaign.html', {'campaign': campaign, 'domains': domains})
 
 
-def get_businesses(request, pk, count):
+def domain(request, id):
 
-    campaign = get_object_or_404(Campaign, pk=pk)
-
-    process = CrawlerProcess(get_project_settings())
-    process.crawl(GetBusinessWebsites, campaign = campaign, count = count)
-
-    domains_for_campaign = BusinessDomains.objects.filter(campaign=campaign)
-
-    visited_domains = set()
-
-    for business in domains_for_campaign:
-            visited_domains.add(business.name)
-
-    return visited_domains
-
+    return HttpResponse(str(id))

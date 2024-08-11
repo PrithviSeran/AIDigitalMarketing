@@ -20,15 +20,32 @@ class WSConsumer(WebsocketConsumer):
         self.accept()
   
 
-    def receive(self, campaign_name):
+    def receive(self, text_data):
 
-        campaign = get_object_or_404(Campaign, name = campaign_name)
+        #print(text_data)
+        #print(type(text_data))
+
+        #print(numofBusiness)
+
+        text_data = json.loads(text_data)
+
+        campaign = text_data["message"]
+        N = text_data["numOfBusinesses"]
+
+        campaign = get_object_or_404(Campaign, name = campaign)
+
+        print("Campaign ID: \n")
+        print(campaign.id)
 
         crawler_settings = Settings()
         crawler_settings.setmodule(my_settings)
 
         process = CrawlerProcess(settings=crawler_settings)
-        process.crawl(GetBusinessWebsites)
+        process.crawl(GetBusinessWebsites, campaign_id = campaign.id, N = int(N))
+
+        #f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "w")
+        #f.write("false")
+        #f.close()
 
         f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
         status = f.read()
@@ -37,6 +54,9 @@ class WSConsumer(WebsocketConsumer):
             f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
             status = f.read()
 
+        f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "w")
+        f.write("false")
+        f.close()
         
         new_domains = BusinessDomains.objects.filter(campaign_id=campaign.id)
 
@@ -45,7 +65,7 @@ class WSConsumer(WebsocketConsumer):
         for business in new_domains:
             visited_domains.append(business.name)
 
-        self.send(text_data=json.dumps({
+        self.send(text_data = json.dumps({
             'message': visited_domains
         }))
 

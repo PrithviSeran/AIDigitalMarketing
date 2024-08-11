@@ -31,16 +31,11 @@ class GetBusinessWebsites(CrawlSpider):
 
     def parse(self, response):
 
-        if self.N <= self.scraped_pages:
-            raise CloseSpider(reason='Max Number Reacher')
-
         business_domain = PrincescrapingItem()
 
         business_domain['campaign_id'] = self.campaign_id
-        business_domain['name'] = response.xpath('//title/text()').get()
+        business_domain['name'] = response.xpath('//title/text()').get().replace("'", "''")
         business_domain['url'] = response.url
-
-        self.scraped_pages =+ 1
 
         yield business_domain
 

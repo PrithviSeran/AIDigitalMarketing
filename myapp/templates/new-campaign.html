@@ -31,19 +31,14 @@
         <div class="campaign-actions">
             <h1 class="raleway-test"> Find Online Businesses</h1>
 
-            <form method = "POST" class="user-input">
-                {% csrf_token %}
-                <!-- <input placeholder="How many businesses?" type="number"> -->
-                 {{ form.count }}
+            <input placeholder="How many businesses?" type="number" id="numOfInputs">
                 
-                <button class="button-9" id="get-businesses">Get Businesses</button>
-            </form>
-            <button id="myButton">Click Me!</button>
+            <button class="button-9" id="get-businesses">Get Businesses</button>
 
             <div class="domains">
                 {% for domain in domains %}
-                    <a class="business" style="text-decoration: none; color: black; text-align: center;">
-                            {{ domain }}
+                    <a href="{% url 'domain' domain.id %}"  class="business" style="text-decoration: none; color: black; text-align: center;">
+                            {{ domain.name }}
                     </a>
                 {% endfor %}
             </div>
@@ -55,14 +50,16 @@
         </div>
     </div>
     <script>
-        const button = document.getElementById('myButton');
+        const button = document.getElementById('get-businesses');
+        var numOfInputs;
         var campaignName = document.getElementById('campaign-name').textContent;
 
         const socket = new WebSocket('ws://localhost:8000/ws/ok/');
 
         // Add a click event listener to the button
         button.addEventListener('click', () => {
-            socket.send(JSON.stringify({ message: campaignName }));
+            numOfInputs = document.getElementById('numOfInputs').value;
+            socket.send(JSON.stringify({ message: campaignName, numOfBusinesses: numOfInputs}));
         })
 
         const containers = document.querySelectorAll('.domains');
