@@ -132,4 +132,4 @@ def campaign(request, id):
 
 def domain(request, id):
 
-    return HttpResponse(str(id))
+    return render(request, 'domain.html')
