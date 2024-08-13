@@ -24,6 +24,7 @@ class GetBusinessWebsites(CrawlSpider):
     scraped_pages = 0
     count = 0
     response = None
+    target_audience = None
     N = 0
 
     rules = (
@@ -36,11 +37,11 @@ class GetBusinessWebsites(CrawlSpider):
         self.campaign_id = campaign_id
         self.N = N
         self.target_audience = target_audience
+        print("TARGET AUDIENCE: ")
+        print(self.target_audience)
+        self.create_connection()
 
     def parse(self, response):
-
-        print("RESPINSE: \n")
-        print(response)
 
         business_domain = PrincescrapingItem()
 
@@ -61,13 +62,13 @@ class GetBusinessWebsites(CrawlSpider):
         driver.get("https://www.google.com")
 
         input_element = driver.find_element(By.NAME, "q")
-        input_element.send_keys("testing"+ Keys.ENTER)
+        input_element.send_keys(self.target_audience + Keys.ENTER)
 
         WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "COVID"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div.g a"))
         )
 
-        links = driver.find_elements(By.PARTIAL_LINK_TEXT, "COVID")
+        links = driver.find_elements(By.CSS_SELECTOR, "div.g a")
 
         time.sleep(5)
 
@@ -85,3 +86,13 @@ class GetBusinessWebsites(CrawlSpider):
         domain = '{uri.netloc}'.format(uri=parsed_uri)
 
         return domain
+    
+    def create_connection(self):
+        self.conn = psycopg2.connect(
+            host ="localhost",
+            dbname ="AIDigMar",
+            user="postgres",
+            password="*PeterisVal6h7j",
+            port="5433")
+        
+        self.curr = self.conn.cursor()
