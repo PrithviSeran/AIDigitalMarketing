@@ -11,4 +11,5 @@ class PrincescrapingItem(scrapy.Item):
     campaign_id = scrapy.Field()
     name = scrapy.Field()
     url = scrapy.Field()
+    domain = scrapy.Field()
 
