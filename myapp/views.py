@@ -12,8 +12,9 @@ from .forms import CampaignForm
 from .models import BusinessDomains
 from .models import NewCampaign as Campaign
 from scrapy.exceptions import CloseSpider
-from django.contrib.auth import get_user_model
+import os
 from django.contrib.auth.models import User
+from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, FIND_EMAIL
 
 
 #CURRENT USER
@@ -132,4 +133,20 @@ def campaign(request, id):
 
 def domain(request, id):
 
-    return render(request, 'domain.html')
+    current_domain = get_object_or_404(BusinessDomains, id = id)
+
+    dir_path = "/Users/prithviseran/Documents/AIDigitalMarketingApp/ScrapedWebsites"
+
+    domain_name = current_domain.domain
+
+    completeName = os.path.join(dir_path, domain_name + ".txt")
+                
+    # Optionally, save the text to a file
+    with open(completeName, 'r') as f:
+        lines = f.readlines()
+
+    lines_string = ''.join(lines)
+
+    email = llama_wrapper(FIND_EMAIL, lines_string)
+
+    return render(request, 'domain.html', {'emailFound': email})

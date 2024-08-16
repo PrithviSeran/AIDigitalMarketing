@@ -37,8 +37,6 @@ class GetBusinessWebsites(CrawlSpider):
         self.campaign_id = campaign_id
         self.N = N
         self.target_audience = target_audience
-        print("TARGET AUDIENCE: ")
-        print(self.target_audience)
         self.create_connection()
 
     def parse(self, response):

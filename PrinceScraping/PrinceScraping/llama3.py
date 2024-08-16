@@ -1,6 +1,8 @@
 from huggingface_hub import InferenceClient
 
 CLEAN_UP_RESPONSE = "Can you remove any CSS, JS, or HTML from this text below. Give me no other extra words in your response: \n "
+
+FIND_EMAIL = "Can you find any contact emails in this text below? If you can, only return the email found. If not, return 'No email found'\n"
     
 TEST_TEXT =  """
 Skip directly to site content

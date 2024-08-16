@@ -28,8 +28,11 @@ class NewCampaign(models.Model):
 class BusinessDomains(models.Model):
     class Meta:
         managed = True
+
     campaign = models.ForeignKey(NewCampaign, on_delete=models.CASCADE, related_name='businesses')
     name = models.CharField(max_length=100, default="default_name")
+    url = models.CharField(max_length=255, default="default_name")
+    domain = models.CharField(max_length=255, default="default_name")
 
 
 class NewBusinessDomains(models.Model):
