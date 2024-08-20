@@ -33,6 +33,8 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 # Application definition
 
+SITE_ID = 3
+
 INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',
@@ -41,9 +43,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'myapp',
-    'channels'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'channels',
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email"
+        ],
+        "AUTH_PARAMS": {"access_type": "online"}
+    }
+}
 
 
 MIDDLEWARE = [
@@ -54,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'AIDigitalMarketingApp.urls'
@@ -78,6 +96,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AIDigitalMarketingApp.wsgi.application'
 
+SOCIALACCOUNT_LOGIN_ON_GET=True
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -151,5 +170,14 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
+)
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 
 

@@ -11,6 +11,5 @@ urlpatterns = [
     path('create_campaign/', views.create_campaign, name='create_campaign'),
     path('campaign/<int:id>/', views.campaign, name='campaign'),
     path('domain/<int:id>/', views.domain, name='domain'),
-   # path('campaign/<int:pk>/generate-emails/', views.generate_emails, name='generate_emails'),
 
 ]

@@ -27,6 +27,10 @@
 				Login
 			</button>
 		</form>
+		<hr>
+			{% load socialaccount %}
+			<h2>Google Login</h2>
+			<a href="{% provider_login_url 'google' %}?next=/">Login with google</a>
 
 		<hr>
 

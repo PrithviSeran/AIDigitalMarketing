@@ -70,8 +70,8 @@ def login_custom(request, *args, **kwargs):
         if request.user.is_authenticated:
 
             return redirect('main')
-        else:
-            return auth_views.LoginView.as_view(template_name='login.html')(request, *args, **kwargs)
+
+    return render(request, 'login.html')
 
     #return render(request, "login.html")
 
