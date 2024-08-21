@@ -96,7 +96,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AIDigitalMarketingApp.wsgi.application'
 
-SOCIALACCOUNT_LOGIN_ON_GET=True
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -106,7 +106,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'AIDigMar',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': '*PeterisVal6h7j',
         'HOST':'localhost',
         'PORT': '5433'
     }
@@ -176,7 +176,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend"
 )
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/main/"
 LOGOUT_REDIRECT_URL = "/"
 
 

@@ -30,8 +30,10 @@
 		<hr>
 			{% load socialaccount %}
 			<h2>Google Login</h2>
-			<a href="{% provider_login_url 'google' %}?next=/">Login with google</a>
-
+			<form action="{% provider_login_url 'google' %}" method="post">
+				{% csrf_token %}
+  				<button type="submit">SIGN IN WITH GOOGLE</button>
+			</form>
 		<hr>
 
 		<h2 style="margin-top: 2em;">Dont have an Account?</h2>

@@ -28,6 +28,8 @@ def home(request):
 @login_required
 def main(request):
 
+    print(request.user)
+
     user =  User.objects.get(username=request.user)
 
     campaigns = Campaign.objects.filter(user = user)
@@ -73,7 +75,6 @@ def login_custom(request, *args, **kwargs):
 
     return render(request, 'login.html')
 
-    #return render(request, "login.html")
 
 
 def register(request):
