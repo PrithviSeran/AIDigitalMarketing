@@ -23,4 +23,8 @@ class CampaignForm(forms.ModelForm):
         model = Campaign
         fields = ['name', 'use', 'user_info', 'purpose', 'target_audience']
 
+class EmailDispatchForm(forms.Form):
+
+    email = forms.EmailField(label='Or use other email')
+
     

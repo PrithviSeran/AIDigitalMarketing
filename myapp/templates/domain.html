@@ -16,12 +16,20 @@
         </div>
 
         <div class="stack grid-item-domain email-send-domain">
-            <h3> What Email do you want to send with?</h3>
-            <input placeholder="Input Email"> 
-        </div>
+            <h3> Email to send with: </h3>
+            <h3>{{ user.email }}</h3>
+            <form method="POST">
+			    {% csrf_token %}
 
-        <div class="stack grid-item-domain email-content-domain">
-            <button> Generate Email </button>
+                <!--
+                <label>Or use another email: </label>
+                {{ form.email }}
+                -->
+
+                <button type="submit"> Generate Email </button>
+
+            </form>
+            
         </div>
     </div>
 {% endblock %}

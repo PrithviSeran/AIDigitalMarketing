@@ -99,4 +99,8 @@ def gmail_send_message():
 
 
 if __name__ == "__main__":
-  gmail_send_message()
+  flow = InstalledAppFlow.from_client_secrets_file(
+          "credentials2.json", SCOPES
+      )
+  creds = flow.run_local_server(port=0)
+  #gmail_send_message()

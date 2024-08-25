@@ -1074,6 +1074,25 @@ var CDC_POST={"id":"1788_50","type":"cdc_dfe","context":"1788-2","lang":"en","au
 
 """
 
+ABOUT_MYSELF = """ My name is Prithvi Seran, and I am a first-year computer science student at the University of Toronto. 
+				   Engineering is a discipline I always wanted to learn alongside my fascination with computer science, so I am looking to explore the overlap of machine learning and mechatronics."""
+
+PURPOSE = "I am seeking research positions for Summer 2025 in the field of computer science, machine learning and computer engineering."
+
+RESEARCH_INFO_TEST = """Alán Aspuru-Guzik is a professor of Chemistry and Computer Science at the University of Toronto and is also the Canada 150 Research Chair in Theoretical Chemistry and a Canada CIFAR AI Chair at the Vector Institute. He is a CIFAR Lebovic Fellow co-directing the Accelerated Decarbonization program. Alán also holds a Google Industrial Research Chair in Quantum Computing. Alán is the director of the Acceleration Consortium, a University of Toronto-based strategic initiative that aims to gather researchers from industry, government, and academia around pre-competitive research topics related to the lab of the future.
+
+Alán began his independent career at Harvard University in 2006 and was a Full Professor at Harvard University from 2013-2018. He received his B.Sc. from the National Autonomous University of Mexico (UNAM) in 1999 and his PhD from the University of California, Berkeley in 2004, where he was also a postdoctoral fellow from 2005-2006.
+
+Alán conducts research in the interfaces of quantum information, machine learning and chemistry. He was a pioneer in the development of algorithms and experimental implementations of quantum computers and quantum simulators dedicated to chemical systems. He has studied the role of quantum coherence in the transfer of excitonic energy in photosynthetic complexes and has accelerated the discovery by calculating organic semiconductors, organic photovoltaic energy, organic batteries and organic light-emitting diodes. He has worked on molecular representations and generative models for the automatic learning of molecular properties. Currently, Alán is interested in automation and "autonomous" chemical laboratories for accelerating scientific discovery.Among other recognitions, he received the Google Focused Award for Quantum Computing, the Sloan Research Fellowship, The Camille and Henry Dreyfus Teacher-Scholar award, and was selected as one of the best innovators under the age of 35 by the MIT Technology Review. He is an elected fellow of the American Physical Society, an elected fellow of the American Association for the Advancement of Science (AAAS), and received the Early Career Award in Theoretical Chemistry from the American Chemical Society. Alán appeared as one of the top 100 most powerful Canadians in 2024 by the Maclean’s Magazine under the AI Category.
+
+Alán is editor-in-chief of the journal Digital Discovery, as well as co-founder of Zapata AI, Kebotix, Intrepid Labs, and Axiomatic AI.
+
+‍
+
+To request a Resume or Curriculum Vitae of Alán please contact aspuru.assistant@utoronto.ca.
+
+
+Alán's Twitter, Substack and Mastodon profile."""
 
 def llama_wrapper(prompt, scraped_text):
     response = ""
@@ -1092,3 +1111,42 @@ def llama_wrapper(prompt, scraped_text):
 
 
     return response
+
+
+def generate_email_using_llama(about_myself, purpose, website_content):
+	response = ""
+      
+	client = InferenceClient(
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        token="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",
+	)
+        
+
+	for message in client.chat_completion( 
+		messages=[{"role": "user", "content": """Heres information about me: \n""" + about_myself + 
+												"""\n  Based on this information, generate me an email for this purpose: \n""" + purpose +
+												"""\n  The email should be catered towards this information: \n""" + website_content }], 
+		max_tokens=500, stream=True,
+		):
+	
+		response = response + message.choices[0].delta.content
+
+	return response
+		
+
+
+if __name__ == "__main__":
+    
+	client = InferenceClient(
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        token="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",
+	)
+        
+
+	for message in client.chat_completion( 
+            messages=[{"role": "user", "content": """Heres information about me: \n""" + ABOUT_MYSELF + 
+                       							  """\n  Based on this information, generate me an email for this purpose: \n""" + PURPOSE +
+                                                  """\n  The email should be catered towards this information: \n""" + RESEARCH_INFO_TEST }], 
+            max_tokens=500, stream=True,):
+    	
+		print(message.choices[0].delta.content)

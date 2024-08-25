@@ -1,20 +1,14 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
-from PrinceScraping.PrinceScraping.spiders.get_businesses import GetBusinessWebsites
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from .forms import MyForm, CustomUserCreationForm, PagesWanted
-from django.contrib.auth import views as auth_views
+from .forms import CustomUserCreationForm, EmailDispatchForm
 from .forms import CampaignForm
 from .models import BusinessDomains
 from .models import NewCampaign as Campaign
-from scrapy.exceptions import CloseSpider
 import os
 from django.contrib.auth.models import User
-from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, FIND_EMAIL
+from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, FIND_EMAIL, generate_email_using_llama
 
 
 #CURRENT USER
@@ -136,6 +130,31 @@ def domain(request, id):
 
     current_domain = get_object_or_404(BusinessDomains, id = id)
 
+    lines_string = get_scraped_info(current_domain)
+
+    email = llama_wrapper(FIND_EMAIL, lines_string)
+
+    if request.method == 'POST':
+
+        return redirect('generate_email')
+
+    return render(request, 'domain.html', {'emailFound': email})
+
+def generate_email(request, id):
+
+    campaign = get_object_or_404(Campaign, id=id)#for all the records 
+    current_domain = get_object_or_404(BusinessDomains, id = id)
+
+    about_myself = campaign.user_info
+    purpose = campaign.purpose
+    scraped_info = get_scraped_info(current_domain)
+
+    llama_generated_email = generate_email_using_llama(about_myself, purpose, scraped_info)
+
+    return render(request, 'generate_email.html', {'email_content': llama_generated_email})
+
+
+def get_scraped_info(current_domain):
     dir_path = "/Users/prithviseran/Documents/AIDigitalMarketingApp/ScrapedWebsites"
 
     domain_name = current_domain.domain
@@ -148,6 +167,4 @@ def domain(request, id):
 
     lines_string = ''.join(lines)
 
-    email = llama_wrapper(FIND_EMAIL, lines_string)
-
-    return render(request, 'domain.html', {'emailFound': email})
+    return lines_string

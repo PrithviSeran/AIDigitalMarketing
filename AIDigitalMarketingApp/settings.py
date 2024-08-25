@@ -56,7 +56,9 @@ SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": [
             "profile",
-            "email"
+            "email",
+            "https://www.googleapis.com/auth/gmail.compose",
+            "https://www.googleapis.com/auth/gmail.send",
         ],
         "AUTH_PARAMS": {"access_type": "online"}
     }
