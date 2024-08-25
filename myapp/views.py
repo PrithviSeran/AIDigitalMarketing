@@ -126,7 +126,7 @@ def campaign(request, id):
     return render(request, 'new-campaign.html', {'campaign': campaign, 'domains': domains})
 
 
-def domain(request, id):
+def domain(request, id, campaign_id):
 
     current_domain = get_object_or_404(BusinessDomains, id = id)
 
@@ -136,13 +136,13 @@ def domain(request, id):
 
     if request.method == 'POST':
 
-        return redirect('generate_email')
+        return redirect('generate_email', id, campaign_id)
 
     return render(request, 'domain.html', {'emailFound': email})
 
-def generate_email(request, id):
+def generate_email(request, id, campaign_id):
 
-    campaign = get_object_or_404(Campaign, id=id)#for all the records 
+    campaign = get_object_or_404(Campaign, id=campaign_id)#for all the records 
     current_domain = get_object_or_404(BusinessDomains, id = id)
 
     about_myself = campaign.user_info

@@ -37,7 +37,7 @@
 
             <div class="domains">
                 {% for domain in domains %}
-                    <a href="{% url 'domain' domain.id %}"  class="business" style="text-decoration: none; color: black; text-align: center;">
+                    <a href="{% url 'domain' domain.id campaign.id%}"  class="business" style="text-decoration: none; color: black; text-align: center;">
                             {{ domain.name }}
                     </a>
                 {% endfor %}

@@ -10,6 +10,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('create_campaign/', views.create_campaign, name='create_campaign'),
     path('campaign/<int:id>/', views.campaign, name='campaign'),
-    path('domain/<int:id>/', views.domain, name='domain'),
+    path('domain/<int:id>/<int:campaign_id>', views.domain, name='domain'),
+    path('generate_email/<int:id>/<int:campaign_id>', views.generate_email, name='generate_email'),
+
 
 ]
