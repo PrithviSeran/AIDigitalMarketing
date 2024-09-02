@@ -79,7 +79,7 @@ response = ""
 
 client = InferenceClient(
     "meta-llama/Meta-Llama-3-8B-Instruct",
-    token="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",
+    token="",
 )
 
 try:
