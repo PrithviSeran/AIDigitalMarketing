@@ -1,5 +1,5 @@
 from huggingface_hub import InferenceClient
-
+import json
 
     
 TEST_TEXT =  """
@@ -82,12 +82,16 @@ client = InferenceClient(
     token="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",
 )
 
-for message in client.chat_completion(
-	messages=[{"role": "user", "content": "Can you find any contact emails in this text below? If you can, only return the email found. If not, return 'No email found'\n" + TEST_TEXT}],
-	max_tokens=500,
-	stream=True,
-):
-    response = response + message.choices[0].delta.content
+try:
+    for message in client.chat_completion(
+        messages=[{"role": "user", "content": "Can you find any contact emails in this text below? If you can, only return the email found. If not, return 'No email found'\n" + TEST_TEXT}],
+        max_tokens=500,
+        stream=True,
+    ):
+        response = response + message.choices[0].delta.content
+
+except json.JSONDecodeError as e:
+    pass
 
 
 print(response)

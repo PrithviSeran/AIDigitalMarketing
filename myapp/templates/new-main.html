@@ -7,7 +7,7 @@
                 <h2>Your Campaigns</h2>
             </div>
                     
-            <div class="stack">
+            <div class="stack" style="height: 75vh;">
                 {% for campaign in campaigns %}
                     <a class="business" href="{% url 'campaign' campaign.id %}" style="text-decoration: none; color: black; text-align: center;">
                             {{ campaign.name }}
@@ -19,7 +19,7 @@
         <div class="campaign-actions">
             <h1 class="raleway-test"> Create a Campaign</h1>
 
-            <form method="POST" class="create-campaign-form">
+            <form method="POST" class="create-campaign-form" style="height: 78.5vh;">
                 {% csrf_token %}
 
                 <div class="name-and-selection">

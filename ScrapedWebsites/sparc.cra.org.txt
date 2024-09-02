@@ -1,0 +1,24 @@
+Here is the text with all CSS, JS, and HTML removed:
+
+Skip to content
+
+CRA-E SPARC
+
+Menu
+Close
+
+Home
+Students
+Mentors
+Stories
+
+Computing research curious?
+
+Or mentoring students who are? This site (Student Pathways into Research in Computing) is full of guidance and student stories to help you navigate your way to computing research, or help others navigate.
+
+Students
+Mentors
+
+This site is maintained by the CRA Education Committee. Content on this site was written by many computing scholars in academia, including, but not limited to: Amy J. Ko (University of Washington), Janet Davis (Whitman College), Victoria Innerante (University of Minnesota), Ran Libeskind-Hadas (Harvey Mudd), Susanne Hambrusch (Purdue University), Borja Sotomayor (University of Chicago), Kelly Shaw (Williams College), Keith Feldman, Max Grossman, Eric Aaron.
+
+Proudly powered by WordPress.

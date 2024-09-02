@@ -14,7 +14,7 @@ from PrinceScraping.PrinceScraping.items import PrincescrapingItem
 import os
 from urllib.parse import urlparse
 import psycopg2
-import nltk
+from scrapy.pqueues import ScrapyPriorityQueue
 
 class GetBusinessWebsites(CrawlSpider):
     name = "princecrawler"
@@ -50,8 +50,7 @@ class GetBusinessWebsites(CrawlSpider):
 
         self.response = response
 
-        yield business_domain
-
+        return business_domain
 
     def start_requests(self) -> Iterable[Request]:
         
@@ -71,13 +70,35 @@ class GetBusinessWebsites(CrawlSpider):
         time.sleep(5)
 
         requests = []
+        self.allowed_domains = []
+
+        domains = self.select_domains()
         
         for link in links:
-            requests.append(Request(link.get_attribute('href')))
+
+            current_request = Request(link.get_attribute('href'))
+
+            domain = self.get_domain(current_request)
+
+            current_request_domain = Request("https://" + domain)
+
+            refined_domain = domain.replace("''", "'")
+            
+            if refined_domain not in domains:
+                requests.append(current_request_domain)
+                self.allowed_domains.append(domain)
         
         driver.quit()
 
-        return requests
+        self.allowed_domains = self.allowed_domains[:self.N]
+
+        print("Requests\n\n")
+
+        print(requests[:self.N])
+
+        print("\n\nRequests")
+
+        return requests[:self.N]
 
     def get_domain(self, response):
         parsed_uri = urlparse(response.url)
@@ -90,7 +111,16 @@ class GetBusinessWebsites(CrawlSpider):
             host ="localhost",
             dbname ="AIDigMar",
             user="postgres",
-            password="",
+            password="*PeterisVal6h7j",
             port="5433")
         
         self.curr = self.conn.cursor()
+
+    def select_domains(self):
+        self.curr.execute(f"""SELECT domain FROM myapp_businessdomains WHERE campaign_id = {self.campaign_id};""")
+
+        result = self.curr.fetchall()
+
+        result = [x[0] for x in result] 
+
+        return result

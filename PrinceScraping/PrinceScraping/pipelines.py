@@ -28,15 +28,16 @@ class SavingToPostgresPipeline(object):
             host ="localhost",
             dbname ="AIDigMar",
             user="postgres",
-            password="",
+            password="*PeterisVal6h7j",
             port="5433")
         
         self.curr = self.conn.cursor()
 
     def process_item(self, item, spider):
 
-        if spider.N <= self.count:
-            raise CloseSpider(reason='Max Number Reacher')
+        # if spider.N <= self.count:
+        #    spider.crawler.engine.slot.scheduler.max_reached = True
+        #    raise CloseSpider(reason='Max Number Reacher')
 
         self.curr.execute(f"""SELECT domain FROM myapp_businessdomains WHERE campaign_id = {spider.campaign_id};""")
 
@@ -46,10 +47,6 @@ class SavingToPostgresPipeline(object):
 
         undo_string = item.get("domain").replace("''", "'")
         # [(166,), (167,)]
-
-        print("Undo String" + undo_string)
-        print("Result")
-        print(result)
 
         if undo_string not in result:
             self.count += 1

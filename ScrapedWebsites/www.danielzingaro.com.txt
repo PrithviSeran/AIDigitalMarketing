@@ -1,0 +1,28 @@
+Welcome!
+
+Welcome. This page contains information about me and my writing, research, and teaching.
+
+I am an Associate Professor Teaching Stream in Computer Science at University of Toronto Mississauga. 
+I teach Intro Programming, Intro CS, Theory of Computation, Systems Programming, Data Structures, Principles of Programming Languages, Algorithms, Computer Science Education Research, and Operating Systems.
+
+I have a PhD from the Ontario Institute for Studies in Education (OISE) at the University of Toronto in Computer Science Education. My dissertation focused on evaluating Peer Instruction (PI) as a pedagogical approach for teaching CS courses.
+
+My No-Bull Programming Books
+
+My passion is taking everything I know about teaching and learning to create books that put the learner first. This stuff did not come easy to me. I struggled behind walls of math and pseudocode, too. I hope to offer a unique take on many programming and computer science topics. I thank you in advance for your time reading what I have to say. I am grateful for each reader and I truly hope my books can help you achieve your programming goals. Please get in touch if you have any comments or questions (or you just want to talk about the hidden pop culture references... :D ).
+
+Start Competitive Programming
+
+Start Competitive Programming!: Ace the USACO Bronze Competition.
+
+We're self-publishing this one! We continue to make edits based on reader feedback. We just made our 2024 update!
+Good coaching is expensive. For this book, we've done our best to bottle up a great coach. Let Coach B help you get started with competitive programming!
+To get better at programming (for your next job interview, personal project, competition), you need to know which problems to solve. Solve problems that are too easy and you won't learn new stuff. Solve problems that are too hard and you may become frustrated due to lack of progress. Let us guide you through the problems we suggest to take you all the way through the Bronze level.
+Learn the most important categories of programming problems. Modelling problems, search problems, optimization problems, geometry problems, string problems, ad hoc problems -- we've got them.
+C++ code for all problems in the book.
+Curated, categorized selections of practice problems, with hints and full C++ code. Python code also provided!
+
+
+The Power of AI
+
+We learned of a service that uses generative AI to translate a book, and we were intrigued by the possibility of (hopefully!) being able to help learners

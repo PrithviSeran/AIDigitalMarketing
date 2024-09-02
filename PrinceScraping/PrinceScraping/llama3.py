@@ -1,5 +1,7 @@
 from huggingface_hub import InferenceClient
 
+import json
+
 CLEAN_UP_RESPONSE = "Can you remove any CSS, JS, or HTML from this text below. Give me no other extra words in your response: \n "
 
 FIND_EMAIL = "Can you find any contact emails in this text below? If you can, only return the email found. If not, return 'No email found'\n"
@@ -1095,22 +1097,25 @@ To request a Resume or Curriculum Vitae of Alán please contact aspuru.assistant
 Alán's Twitter, Substack and Mastodon profile."""
 
 def llama_wrapper(prompt, scraped_text):
-    response = ""
 
-    client = InferenceClient(
+	response = ""
+      
+	client = InferenceClient(
         "meta-llama/Meta-Llama-3-8B-Instruct",
         token="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",
-    )
+	)
+        
+	try:
+		for message in client.chat_completion( 
+			messages=[{"role": "user", "content": prompt + scraped_text}], max_tokens=5000, stream=True
+			):
+		
+			response = response + message.choices[0].delta.content
 
-    for message in client.chat_completion(
-        messages=[{"role": "user", "content": prompt + scraped_text}],
-        max_tokens=500,
-        stream=True,
-    ):
-        response = response + message.choices[0].delta.content
+	except json.JSONDecodeError as e:
+		pass
 
-
-    return response
+	return response
 
 
 def generate_email_using_llama(about_myself, purpose, website_content):
@@ -1121,32 +1126,26 @@ def generate_email_using_llama(about_myself, purpose, website_content):
         token="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",
 	)
         
+	try:
+		for message in client.chat_completion( 
+			messages=[{"role": "user", "content": """Heres information about me: \n""" + about_myself + 
+													"""\n  Based on this information, generate me an email for this purpose: \n""" + purpose +
+													"""\n  The email should be catered towards this information: \n""" + website_content }], 
+			max_tokens=7000, stream=True,
+			):
+		
+			response = response + message.choices[0].delta.content
 
-	for message in client.chat_completion( 
-		messages=[{"role": "user", "content": """Heres information about me: \n""" + about_myself + 
-												"""\n  Based on this information, generate me an email for this purpose: \n""" + purpose +
-												"""\n  The email should be catered towards this information: \n""" + website_content }], 
-		max_tokens=500, stream=True,
-		):
-	
-		response = response + message.choices[0].delta.content
+	except json.JSONDecodeError as e:
+		pass
 
 	return response
 		
 
-
 if __name__ == "__main__":
     
-	client = InferenceClient(
-        "meta-llama/Meta-Llama-3-8B-Instruct",
-        token="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",
-	)
-        
+	
+	print(llama_wrapper(CLEAN_UP_RESPONSE, TEST_TEXT))
 
-	for message in client.chat_completion( 
-            messages=[{"role": "user", "content": """Heres information about me: \n""" + ABOUT_MYSELF + 
-                       							  """\n  Based on this information, generate me an email for this purpose: \n""" + PURPOSE +
-                                                  """\n  The email should be catered towards this information: \n""" + RESEARCH_INFO_TEST }], 
-            max_tokens=500, stream=True,):
-    	
-		print(message.choices[0].delta.content)
+
+        

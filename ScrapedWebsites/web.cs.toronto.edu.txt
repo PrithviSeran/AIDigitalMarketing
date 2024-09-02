@@ -1,0 +1,51 @@
+Here is the text without CSS, JS, or HTML:
+
+Top
+
+Static.COOKIE_BANNER_CAPABLE = true;
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('set', 'developer_id.dZjQwMz', true);
+gtag('config', 'UA-183905867-1');
+gtag('config', 'G-B3ZVB8PPEZ');
+
+Home
+About
+Welcome from the Chair
+Our Department
+Our Faculty
+Employment Opportunities
+Groups, Clubs & Communities
+Alumni
+Safety & Support
+
+Undergraduate
+Prospective Students
+Current Students
+How to Apply to a CS Program
+Courses
+Mentorship, Work & Research Opportunities
+Scholarships & Awards
+
+Graduate
+Our Graduate Programs
+Prospective Students
+Current Students
+
+Research
+Research Areas
+Faculty Research Interests
+Partner with Us
+
+News & Events
+News
+Events
+Distinguished Lecture Series
+
+People
+Chair's Office
+Faculty Directory
+Staff Directory
+In Memoriam
+Contact Us
