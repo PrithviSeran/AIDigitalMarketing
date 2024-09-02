@@ -111,7 +111,7 @@ class GetBusinessWebsites(CrawlSpider):
             host ="localhost",
             dbname ="AIDigMar",
             user="postgres",
-            password="*PeterisVal6h7j",
+            password="",
             port="5433")
         
         self.curr = self.conn.cursor()
