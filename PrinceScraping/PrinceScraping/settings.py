@@ -23,7 +23,7 @@ BOT_NAME = "PrinceScraping.PrinceScraping"
 SPIDER_MODULES = ["PrinceScraping.PrinceScraping.spiders"]
 NEWSPIDER_MODULE = "PrinceScraping.PrinceScraping.spiders"
 
-SCHEDULER = 'PrinceScraping.PrinceScraping.schedulers.PrinceScrapingScheduler'
+#SCHEDULER = 'PrinceScraping.PrinceScraping.schedulers.PrinceScrapingScheduler'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "PrinceScraping (+http://www.yourdomain.com)"
