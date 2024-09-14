@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="grid-container-domain">
-    <div class="stack grid-item-domain content-domain">
-        <h3> Content Found from Website </h3>
-        <h3> Content </h3>
-        <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, quidem corrupti. Quidem id quis, accusantium eos, obcaecati aperiam itaque quos unde porro harum nisi nobis dolorem. A saepe ullam natus.
+<div class="whole-campaign">
+    <div class="camapign-card">
+        <h3 class="campaign-header"> Content Found from Website </h3>
+        <div class = "stack" style="height: 75vh;">
+            <div class="info">
+                <h3> Content </h3>
+                <p> 
+                   {{ website_content }}
+                </p>
+            </div>
         </div>
     </div>
 
-    <div class="stack grid-item-domain email-send-domain">
-        <p>
-            {{ email_content }}
-        </p>
-        <button>
-            Send Email
-        </button>
+    <div class="campaign-actions">
+        <h3 class="campaign-header"> Email Content </h3>
+        <div class="domains" style="text-align: center;">
+            <div class="business">
+                {{ email_content }}
+            </div>
+        </div>
+        <form method="POST" style="text-align: center;">
+            {% csrf_token %}
+
+            <button class="button-9" id="get-businesses" type="submit"> Send Email </button>
+        </form>
     </div>
 </div>
 

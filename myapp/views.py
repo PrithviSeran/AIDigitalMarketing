@@ -9,9 +9,7 @@ from .models import NewCampaign as Campaign
 import os
 from django.contrib.auth.models import User
 from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, FIND_EMAIL, generate_email_using_llama
-
-
-#CURRENT USER
+from myapp.gmail_dispath import gmail_dispath
 
 
 def home(request):
@@ -138,7 +136,8 @@ def domain(request, id, campaign_id):
 
         return redirect('generate_email', id, campaign_id)
 
-    return render(request, 'domain.html', {'emailFound': email})
+    return render(request, 'domain.html', {'emailFound': email, "website_content": lines_string})
+
 
 def generate_email(request, id, campaign_id):
 
@@ -151,7 +150,26 @@ def generate_email(request, id, campaign_id):
 
     llama_generated_email = generate_email_using_llama(about_myself, purpose, scraped_info)
 
-    return render(request, 'generate_email.html', {'email_content': llama_generated_email})
+    return render(request, 'generate_email.html', {'email_content': llama_generated_email, "website_content": scraped_info})
+
+def send_email(request, id):
+
+    user = request.user
+
+    user_email = user.email
+
+    current_domain = get_object_or_404(BusinessDomains, id = id)
+
+    lines_string = get_scraped_info(current_domain)
+
+    email_to = llama_wrapper(FIND_EMAIL, lines_string)
+
+    #email_from, email_to, email_content, email_subject
+
+    gmail_dispath(user_email, email_to, lines_string, "Test Subject")
+
+
+    return render(request, 'email_sent.html')
 
 
 def get_scraped_info(current_domain):

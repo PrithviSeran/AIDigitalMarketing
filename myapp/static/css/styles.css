@@ -172,6 +172,21 @@
     border-radius: 2em;
 }
 
+.business-domain{
+    margin-left: 1em;
+    margin-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border: solid;
+    font-size: large;
+    background-color: rgba(143,160,250,0.29);
+    border-color: rgba(0,0,0, .2);
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+    border-radius: 2em;
+}
+
 .business:hover{
     transform: scale(1.02);
     background-color: rgba(80, 108, 251, 0.29);
