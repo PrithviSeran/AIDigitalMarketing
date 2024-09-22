@@ -19,12 +19,6 @@
                 <div class="business">
                     {{ emailFound }}
                 </div>
-                
-                <h3> Email to send with: </h3>
-
-                <div class="business">
-                    <h3>{{ user.email }}</h3>
-                </div>
 
                 <form method="POST">
                     {% csrf_token %}

@@ -10,6 +10,7 @@ import os
 from django.contrib.auth.models import User
 from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, FIND_EMAIL, generate_email_using_llama
 from myapp.gmail_dispath import gmail_dispath
+from django.http import HttpResponse
 
 
 def home(request):
@@ -150,7 +151,8 @@ def generate_email(request, id, campaign_id):
 
     llama_generated_email = generate_email_using_llama(about_myself, purpose, scraped_info)
 
-    return render(request, 'generate_email.html', {'email_content': llama_generated_email, "website_content": scraped_info})
+    return render(request, 'generate_email.html', {'email_content': llama_generated_email, "website_content": scraped_info, "id": id})
+
 
 def send_email(request, id):
 
@@ -168,8 +170,7 @@ def send_email(request, id):
 
     gmail_dispath(user_email, email_to, lines_string, "Test Subject")
 
-
-    return render(request, 'email_sent.html')
+    return HttpResponse("Sent Email")
 
 
 def get_scraped_info(current_domain):

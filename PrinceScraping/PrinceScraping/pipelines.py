@@ -28,7 +28,7 @@ class SavingToPostgresPipeline(object):
             host ="localhost",
             dbname ="AIDigMar",
             user="postgres",
-            password="",
+            password="PeterisVal6h7j",
             port="5433")
         
         self.curr = self.conn.cursor()

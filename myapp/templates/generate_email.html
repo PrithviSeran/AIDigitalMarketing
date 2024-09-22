@@ -21,7 +21,7 @@
                 {{ email_content }}
             </div>
         </div>
-        <form method="POST" style="text-align: center;">
+        <form action="{% url 'send_email' id %}"method="POST" style="text-align: center;">
             {% csrf_token %}
 
             <button class="button-9" id="get-businesses" type="submit"> Send Email </button>
