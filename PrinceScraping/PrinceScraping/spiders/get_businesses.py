@@ -11,46 +11,65 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from PrinceScraping.PrinceScraping.items import PrincescrapingItem
-import os
+import scrapy
 from urllib.parse import urlparse
 import psycopg2
-from scrapy.pqueues import ScrapyPriorityQueue
+from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, CLEAN_UP_RESPONSE, check_if_content_is_relavent, TEST_TEXT
+
 
 class GetBusinessWebsites(CrawlSpider):
     name = "princecrawler"
-    #start_urls = ['https://www.chocolate.co.uk']
-    #allowed_domains = ['https://www.chocolate.co.uk']
+
     campaign_id = 0
     scraped_pages = 0
     count = 0
     response = None
     target_audience = None
+    purpose = None
+    user_info = None
     N = 0
+    token_cap = 14000
 
     rules = (
         Rule(LinkExtractor(allow=""), callback="parse"),
     )
 
-    def __init__(self, campaign_id, N = 1, target_audience = None, *args, **kwargs):
+    def __init__(self, campaign_id, N = 1, target_audience = None, purpose = None, user_info = None, *args, **kwargs):
         super(GetBusinessWebsites, self).__init__(*args, **kwargs)
 
         self.campaign_id = campaign_id
         self.N = N
         self.target_audience = target_audience
+        self.purpose = purpose
+        self.user_info = user_info
         self.create_connection()
 
+
     def parse(self, response):
+            
+            body_text = ''.join(response.xpath("//body//text()").extract()).strip()
 
-        business_domain = PrincescrapingItem()
+            if len(body_text) > 14000: body_text = body_text[:14000]
+            
+            content = llama_wrapper(CLEAN_UP_RESPONSE, body_text)
 
-        business_domain['campaign_id'] = self.campaign_id
-        business_domain['name'] = response.xpath('//title/text()').get().replace("'", "''")
-        business_domain['domain'] = self.get_domain(response)
-        business_domain['url'] = response.url
+            print(body_text)
 
-        self.response = response
+            business_domain = PrincescrapingItem()
 
-        return business_domain
+            business_domain['campaign_id'] = self.campaign_id
+            business_domain['name'] = response.xpath('//title/text()').get().replace("'", "''")
+            business_domain['domain'] = self.get_domain(response)
+            business_domain['url'] = response.url
+            business_domain['target_audience'] = self.target_audience
+            business_domain['purpose'] = self.purpose
+            business_domain['user_info'] = self.user_info
+            business_domain['content'] = content
+
+            self.response = response
+
+            return business_domain
+
 
     def start_requests(self) -> Iterable[Request]:
         
@@ -69,52 +88,63 @@ class GetBusinessWebsites(CrawlSpider):
 
         time.sleep(5)
 
-        requests = []
         self.allowed_domains = []
 
+
         domains = self.select_domains()
+
+        self.count = 0
+
+        print("LINKS\n")
+        print(links)
+        print("LINK")
         
         for link in links:
 
             current_request = Request(link.get_attribute('href'))
 
             domain = self.get_domain(current_request)
-
-            current_request_domain = Request("https://" + domain)
-
-            refined_domain = domain.replace("''", "'")
             
-            if refined_domain not in domains:
-                requests.append(current_request_domain)
-                self.allowed_domains.append(domain)
-        
+            if domain not in domains and self.count < self.N:
+
+                print("\nIs it even running???\n")
+                self.count += 1
+
+                self.allowed_domains = [domain]
+
+                link_href = link.get_attribute('href')
+
+                yield scrapy.Request(link_href, callback=self.parse)
+
         driver.quit()
 
-        self.allowed_domains = self.allowed_domains[:self.N]
 
-        print("Requests\n\n")
 
-        print(requests[:self.N])
+    def handle_error(self, failure):
+        self.logger.info("Skipping restricted page!")
+        # Simply return None so the spider skips the forbidden page
+        return None
 
-        print("\n\nRequests")
-
-        return requests[:self.N]
 
     def get_domain(self, response):
         parsed_uri = urlparse(response.url)
         domain = '{uri.netloc}'.format(uri=parsed_uri)
 
+        domain = domain.replace("''", "'")
+
         return domain
     
+
     def create_connection(self):
         self.conn = psycopg2.connect(
             host ="localhost",
             dbname ="AIDigMar",
             user="postgres",
-            password="",
+            password="*PeterisVal6h7j",
             port="5433")
         
         self.curr = self.conn.cursor()
+
 
     def select_domains(self):
         self.curr.execute(f"""SELECT domain FROM myapp_businessdomains WHERE campaign_id = {self.campaign_id};""")
@@ -124,3 +154,4 @@ class GetBusinessWebsites(CrawlSpider):
         result = [x[0] for x in result] 
 
         return result
+

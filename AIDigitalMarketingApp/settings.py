@@ -27,9 +27,20 @@ SECRET_KEY = 'django-insecure-s7$ltil38kkwfiiww#=qm9oap=tbrjc!+!@y@-8f%x2k95^&73
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
 
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+#os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 # Application definition
 
@@ -50,6 +61,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'channels',
+    'rest_framework', 
+    'corsheaders'
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -73,7 +86,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'AIDigitalMarketingApp.urls'
@@ -83,7 +98,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "myapp", "frontend", "html")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -147,10 +162,22 @@ USE_TZ = True
 
 ASGI_APPLICATION = 'AIDigitalMarketingApp.asgi.application'
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication',],
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',],
+    }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -162,7 +189,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #]
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, "myapp", "frontend", "public"),
+    os.path.join(BASE_DIR, "myapp", "frontend", "dist")
 ]
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

@@ -11,7 +11,7 @@ from itemadapter import ItemAdapter
 from scrapy.exceptions import CloseSpider
 import psycopg2
 from urllib.parse import urlparse
-from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, CLEAN_UP_RESPONSE
+from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, CLEAN_UP_RESPONSE, check_if_content_is_relavent
 import os
 import re
 
@@ -28,32 +28,28 @@ class SavingToPostgresPipeline(object):
             host ="localhost",
             dbname ="AIDigMar",
             user="postgres",
-            password="PeterisVal6h7j",
+            password="*PeterisVal6h7j",
             port="5433")
         
         self.curr = self.conn.cursor()
 
     def process_item(self, item, spider):
 
-        # if spider.N <= self.count:
-        #    spider.crawler.engine.slot.scheduler.max_reached = True
-        #    raise CloseSpider(reason='Max Number Reacher')
+        relevance = self.check_relevancy(item)
 
-        self.curr.execute(f"""SELECT domain FROM myapp_businessdomains WHERE campaign_id = {spider.campaign_id};""")
+        print("RELEVANCE\n")
+        print(relevance)
+        print(item.get("content").strip())
+        print("RELEVANCE")
 
-        result = self.curr.fetchall()
+        if relevance == "True":
 
-        result = [x[0] for x in result] 
-
-        undo_string = item.get("domain").replace("''", "'")
-        # [(166,), (167,)]
-
-        if undo_string not in result:
-            self.count += 1
-            self.get_content_of_page(spider.response, item.get("domain"))
             self.store_db(item)
+            return item
+        
+        else:
 
-        return item
+            return None
     
     def close_spider(self, item):
         f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "w")
@@ -66,21 +62,57 @@ class SavingToPostgresPipeline(object):
         name = item.get("name")
         url = item.get("url")
         domain = item.get("domain")
+        content = item.get("content")
 
-        self.curr.execute(f""" INSERT INTO myapp_businessdomains (name, campaign_id, url, domain) VALUES ('{name}', {campaign_id}, '{url}', '{domain}');""")
-        self.conn.commit()
+        try:
+            # Execute the SELECT query to check if the domain exists
+            self.curr.execute(
+                """SELECT EXISTS (
+                    SELECT 1 
+                    FROM myapp_businessdomains 
+                    WHERE domain = %s AND campaign_id = %s
+                );""",
+                (domain, campaign_id)
+            )
+            
+            # Fetch the result of the EXISTS query
+            exists = self.curr.fetchone()[0]
+            
+            # If the domain does not exist, proceed with the INSERT query
+            if not exists:
 
-    def get_content_of_page(self, response, domain):
-
-        body_text = ''.join(response.xpath("//body//text()").extract()).strip()
-
-        body_text = llama_wrapper(CLEAN_UP_RESPONSE, body_text)
-
-        dir_path = "/Users/prithviseran/Documents/AIDigitalMarketingApp/ScrapedWebsites"
-
-        completeName = os.path.join(dir_path, domain + ".txt")
+                self.curr.execute(
+                    """INSERT INTO myapp_businessdomains 
+                    (name, campaign_id, url, domain, content) 
+                    VALUES (%s, %s, %s, %s, %s);""",
+                    (name, campaign_id, url, domain, content)
+                )
                 
-        # Optionally, save the text to a file
-        with open(completeName, 'w') as f:
-                f.write(body_text)
+                # Commit the transaction after a successful insert
+                self.conn.commit()
 
+            else:
+                self.curr.execute(
+                    """UPDATE myapp_businessdomains
+                    SET content = content ||  %s
+                    WHERE domain = %s
+                    AND campaign_id = %s;""",
+                    (" " + content, domain, campaign_id)
+                )
+
+                # Commit the transaction after a successful insert
+                self.conn.commit()
+
+
+        except psycopg2.Error as e:
+            # Rollback the transaction in case of any error
+            self.conn.rollback()
+            print(f"Error occurred: {e}")
+
+
+
+    def check_relevancy(self, item):
+
+        relevance = check_if_content_is_relavent(item.get("content"), item.get("user_info"), item.get("purpose"))
+
+        return relevance

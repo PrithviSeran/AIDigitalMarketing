@@ -12,4 +12,8 @@ class PrincescrapingItem(scrapy.Item):
     name = scrapy.Field()
     url = scrapy.Field()
     domain = scrapy.Field()
+    target_audience = scrapy.Field()
+    purpose = scrapy.Field()
+    user_info = scrapy.Field()
+    content = scrapy.Field()
 

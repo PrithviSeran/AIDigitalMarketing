@@ -22,6 +22,7 @@ Learn the most important categories of programming problems. Modelling problems,
 C++ code for all problems in the book.
 Curated, categorized selections of practice problems, with hints and full C++ code. Python code also provided!
 
+Contact: prithisha33@gmail.com
 
 The Power of AI
 

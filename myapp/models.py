@@ -33,6 +33,8 @@ class BusinessDomains(models.Model):
     name = models.CharField(max_length=100, default="default_name")
     url = models.CharField(max_length=255, default="default_name")
     domain = models.CharField(max_length=255, default="default_name")
+    content = models.TextField(default="None")
+    # need to add finished flag
 
 
 class NewBusinessDomains(models.Model):

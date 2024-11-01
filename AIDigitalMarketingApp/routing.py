@@ -6,7 +6,7 @@ import myapp.routing
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
         URLRouter(
-            myapp.routing.websocket_urlpatterns
+            myapp.routing.ws_urlpatterns
         )
     ),
 })

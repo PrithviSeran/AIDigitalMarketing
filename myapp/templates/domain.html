@@ -15,18 +15,34 @@
         </div>
         <div class="campaign-actions">
             <div class="domains" style="text-align: center;">
-                <h3>Email Found</h3>
+                <h3>Email Found: </h3>
                 <div class="business">
                     {{ emailFound }}
                 </div>
 
-                <form method="POST">
+                <form method="POST" id="business">
                     {% csrf_token %}
-
-                    <button class="button-9" id="get-businesses" type="submit"> Generate Email </button>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        var el = document.getElementById('business');
+        
+        var inside_content = el.innerHTML;
+
+        console.log(inside_content)
+
+        var content;
+
+        if  (inside_contennt == "No email found") {
+            content = '';
+        }
+        else{
+            content = '<button class="button-9" id="get-businesses" type="submit"> Generate Email </button>';
+        }
+
+        el.insertAdjacentHTML('afterbegin', content);
+    </script>
 {% endblock %}
 

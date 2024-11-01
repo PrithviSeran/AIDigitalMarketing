@@ -7,6 +7,9 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from PrinceScraping.PrinceScraping.llama3 import llama_wrapper, CLEAN_UP_RESPONSE, check_if_content_is_relavent, TEST_TEXT
+from scrapy.exceptions import IgnoreRequest
+from scrapy.http import TextResponse, HtmlResponse
 
 
 class PrincescrapingSpiderMiddleware:
@@ -31,8 +34,8 @@ class PrincescrapingSpiderMiddleware:
     def process_spider_output(self, response, result, spider):
         # Called with the results returned from the Spider, after
         # it has processed the response.
-
         # Must return an iterable of Request, or item objects.
+
         for i in result:
             yield i
 
@@ -47,6 +50,8 @@ class PrincescrapingSpiderMiddleware:
         # Called with the start requests of the spider, and works
         # similarly to the process_spider_output() method, except
         # that it doesn’t have a response associated.
+
+        #GET LLAMA TO DECIDE IF THE PAGE THAT IS SCRAPED IS RELAVENT TO THE PERSON
 
         # Must return only requests (not items).
         for r in start_requests:

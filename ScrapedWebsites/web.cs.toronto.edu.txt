@@ -1,51 +1,12 @@
-Here is the text without CSS, JS, or HTML:
+Here is the text without any CSS, JS, or HTML:
 
-Top
+ Professor Raquel Urtasun named Fellow of the Royal Society of Canada 
+ Professor Raquel Urtasun has been elected a Fellow of the Royal Society of Canada — a prestigious distinction given to individuals who have made remarkable contributions in the arts, humanities, sciences, and in Canadian public life.  Urtasun is the founder and CEO of self-driving trucking startup Waabi and a co-founder of the Vector Institute for Artificial Intelligence.   “I am truly humbled to be named a Fellow of the Royal Society of Canada and honoured to be recognized as a leader for my contributions to artificial intelligence,” says Urtasun.  “Having immigrated here over ten years ago with a dream to change the world through self-driving, I would not have been able to fulfil it without the support of my colleagues at University of Toronto, my incredible team at Waabi, and the Canadian innovation community at large. My love for and pride in Canada have inspired every step of my journey thus far, and I look forward to making Canada the global leader of AI in the physical world.”
 
-Static.COOKIE_BANNER_CAPABLE = true;
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('set', 'developer_id.dZjQwMz', true);
-gtag('config', 'UA-183905867-1');
-gtag('config', 'G-B3ZVB8PPEZ');
+A leading expert in artificial intelligence, Urtasun’s research in machine learning, computer vision and robotics is aimed at pioneering generative AI for the physical world and developing the next generation of autonomous driving technology.  “Raquel is a visionary researcher and entrepreneur whose remarkable achievements in AI are a shining example of Canadian technological innovation,” says Eyal de Lara, professor and chair of the Department of Computer Science.  “I congratulate her on this well-deserved recognition.”
 
-Home
-About
-Welcome from the Chair
-Our Department
-Our Faculty
-Employment Opportunities
-Groups, Clubs & Communities
-Alumni
-Safety & Support
+In June, Waabi raised US$200 million in series B funding to support the deployment of fully autonomous, AI-powered trucks in 2025. This latest funding brings total investment in Waabi to more than C$380 million and will be used to expand the Toronto-headquartered company’s team in both Canada and the U.S., as well as to launch driverless commercial deliveries in Texas by next year.
 
-Undergraduate
-Prospective Students
-Current Students
-How to Apply to a CS Program
-Courses
-Mentorship, Work & Research Opportunities
-Scholarships & Awards
+Earlier this year, Urtasun was appointed to the Order of Ontario, the province’s highest civilian honour.
 
-Graduate
-Our Graduate Programs
-Prospective Students
-Current Students
-
-Research
-Research Areas
-Faculty Research Interests
-Partner with Us
-
-News & Events
-News
-Events
-Distinguished Lecture Series
-
-People
-Chair's Office
-Faculty Directory
-Staff Directory
-In Memoriam
-Contact Us
+Tagged: Raquel Urtasun, Royal Society of Canada, artificial intelligence, Waabi

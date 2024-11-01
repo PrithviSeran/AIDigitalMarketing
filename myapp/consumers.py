@@ -7,10 +7,10 @@ from .models import BusinessDomains, NewBusinessDomains
 from .models import NewCampaign as Campaign
 from scrapy.crawler import CrawlerProcess
 from django.shortcuts import get_object_or_404
-#from scrapy.utils.project import settings
 from scrapy.settings import Settings
 from PrinceScraping.PrinceScraping.spiders.get_businesses import GetBusinessWebsites
 from PrinceScraping.PrinceScraping import settings as my_settings
+from myapp.serializer import *
 
 
 class WSConsumer(WebsocketConsumer):
@@ -22,16 +22,23 @@ class WSConsumer(WebsocketConsumer):
 
         text_data = json.loads(text_data)
 
-        campaign = text_data["message"]
+        print(text_data)
+
+        campaign_id = text_data["message"]
         N = text_data["numOfBusinesses"]
 
-        campaign = get_object_or_404(Campaign, name = campaign)
+        campaign = Campaign.objects.get(id = campaign_id)
 
         crawler_settings = Settings()
         crawler_settings.setmodule(my_settings)
 
         process = CrawlerProcess(settings=crawler_settings)
-        process.crawl(GetBusinessWebsites, campaign_id = campaign.id, N = int(N), target_audience = campaign.target_audience)
+        process.crawl(GetBusinessWebsites,
+                      campaign_id = campaign.id,
+                      N = int(N),
+                      target_audience = campaign.target_audience,
+                      purpose = campaign.purpose,
+                      user_info = campaign.user_info)
 
         f = open("/Users/prithviseran/Documents/AIDigitalMarketingApp/scrapy-done.txt", "r")
         status = f.read()
@@ -46,13 +53,29 @@ class WSConsumer(WebsocketConsumer):
         
         new_domains = BusinessDomains.objects.filter(campaign_id=campaign.id)
 
-        visited_domains = []
-
-        for business in new_domains:
-            visited_domains.append(business.name)
+        new_domains_serializer = DomainsSerializer(new_domains, many=True)
 
         self.send(text_data = json.dumps({
-            'message': visited_domains
+            'message': new_domains_serializer.data
+        }))
+
+class CampaignWSConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+  
+
+    def receive(self, text_data):
+
+        text_data = json.loads(text_data)
+
+        user = self.scope["user"]
+
+        campaigns = Campaign.objects.filter(user = user)
+
+        serializer = NewCampaignSerializer(campaigns, many=True)
+
+        self.send(text_data = json.dumps({
+            'message': serializer.data
         }))
 
  

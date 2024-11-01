@@ -2,7 +2,7 @@ from huggingface_hub import InferenceClient
 
 import json
 
-CLEAN_UP_RESPONSE = "Can you remove any CSS, JS, or HTML from this text below. Give me no other extra words in your response: \n "
+CLEAN_UP_RESPONSE = "Can you remove any CSS, JS, or HTML from this text below. Give me no other extra words in your response. If there is no HTML, CSS, or JS, just return the text: \n "
 
 FIND_EMAIL = "Can you find any contact emails in this text below? If you can, only return the email found AND NO OTHER ADDITIONAL TEXT. If not, return 'No email found' AND NO OTHER ADDITIONAL TEXT\n"
     
@@ -1096,6 +1096,15 @@ To request a Resume or Curriculum Vitae of Alán please contact aspuru.assistant
 
 Alán's Twitter, Substack and Mastodon profile."""
 
+
+SAMPLE_WEBSITE_CONTENT = """Welcome to the Continuum Robotics Laboratory! Exploring the boundaries of robotics, we are pioneering a future with continuum robots, inspired by nature's most adaptable forms. These innovative robots, with their joint-less, continuous structure, can navigate confined spaces, manipulate objects in complex environments, and traverse curvilinear paths in ways that conventional robots cannot. Join us as we redefine the limits of robotic capabilities and open new horizons for technology to interact with the world."""
+
+UNRELATED_CONTENT = """A Toronto rapper who was charged in a fatal 2021 shooting has been released after a judge dismissed social media evidence in the case.
+Hassan Ali, who also goes by the stage name "Top5," was arrested in Los Angeles three years ago in connection with the killing of Hashim Omar Hashi.
+A superior court judge said Monday that Ali was free to go after ruling that some of the submissions were inadmissible as evidence.
+"I can go?" he asked the judge smiling after he was told that the Crown would be staying the charges.
+"""
+
 def llama_wrapper(prompt, scraped_text):
 
 	response = ""
@@ -1109,8 +1118,9 @@ def llama_wrapper(prompt, scraped_text):
 		for message in client.chat_completion( 
 			messages=[{"role": "user", "content": prompt + scraped_text}], max_tokens=5000, stream=True
 			):
-		
-			response = response + message.choices[0].delta.content
+
+			if message.choices and len(message.choices) > 0 and message.choices[0].delta and message.choices[0].delta.content:
+				response += message.choices[0].delta.content
 
 	except json.JSONDecodeError as e:
 		pass
@@ -1129,7 +1139,7 @@ def generate_email_using_llama(about_myself, purpose, website_content):
 	try:
 		for message in client.chat_completion( 
 			messages=[{"role": "user", "content": """Heres information about me: \n""" + about_myself + 
-													"""\n  Based on this information, generate me an email for this purpose: \n""" + purpose +
+													"""\n  Based on this information, generate me an email for this purpose (please only return the words that are meant to be in the email): \n""" + purpose +
 													"""\n  The email should be catered towards this information: \n""" + website_content }], 
 			max_tokens=7000, stream=True,
 			):
@@ -1140,12 +1150,36 @@ def generate_email_using_llama(about_myself, purpose, website_content):
 		pass
 
 	return response
+
+
+def check_if_content_is_relavent(website_content, user_information, purpose):
+
+	response = ""
+      
+	client = InferenceClient(
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        token="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",
+	)
+        
+	try:
+		for message in client.chat_completion( 
+			messages=[{"role": "user", "content": "Based on this information on a website: \n" + website_content + "\nDo you think this website is relevant to me? Here is the information about me:\n" +
+			  										user_information + "Here is my purpose: \n" + purpose + "\nMake sure to only give one word answer; Output 'True' if it is relevant, 'False' if it is not relevant. I want no other text."}], max_tokens=5000, stream=True
+			):
 		
+			response = response + message.choices[0].delta.content
+
+	except json.JSONDecodeError as e:
+		pass
+
+	return response
 
 if __name__ == "__main__":
-    
+
+
+    print(len(TEST_TEXT))
 	
-	print(llama_wrapper(CLEAN_UP_RESPONSE, TEST_TEXT))
+	#print(llama_wrapper(CLEAN_UP_RESPONSE, TEST_TEXT))
 
 
         
