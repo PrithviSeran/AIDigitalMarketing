@@ -48,18 +48,6 @@ class ReactView(APIView):
             return  Response(serializer.data)
 
 
-class UserRegister(APIView):
-	permission_classes = (permissions.AllowAny,)
-	def post(self, request):
-		clean_data = custom_validation(request.data)
-		serializer = UserRegisterSerializer(data=clean_data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.create(clean_data)
-			if user:
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-
 class UserView(APIView):
 	permission_classes = (permissions.IsAuthenticated,)
 	authentication_classes = (SessionAuthentication,)
@@ -89,6 +77,9 @@ class UserLogin(APIView):
              
              return Response({"message": True, "campaigns": serializer.data}, status=status.HTTP_200_OK)
           
+          else:
+             return Response(status=status.HTTP_200_OK)
+                  
 
      def post(self, request):
 
@@ -147,8 +138,6 @@ class CreateCampaign(APIView):
      authentication_classes = (SessionAuthentication,)
 
      def get(self, request):
-           
-            print(request.GET)
 
             form = CampaignForm(request.GET)
 
@@ -171,6 +160,7 @@ class CampaignBusinesses(APIView):
         campaign_id = request.GET.get("id")
           
         domains = BusinessDomains.objects.filter(campaign_id = campaign_id)
+        
 
         serializer = DomainsSerializer(domains, many=True)
 
@@ -212,7 +202,41 @@ class GetEmail(APIView):
 
 class SendEmail(APIView):
      
-     pass
+    def get(self, request):
+         
+        user = request.user
+
+        user_email = user.email
+
+        email_to = request.GET.get("emailTo")
+
+        body = request.GET.get("body")
+
+        subject = request.GET.get("subject")
+
+        gmail_dispath(user_email, email_to, body, subject)
+
+        return Response(status=status.HTTP_200_OK)
+
+     
+
+class UserRegister(APIView):
+     permission_classes = (permissions.AllowAny,)
+
+     def get(self, request):
+          
+        user_form = CustomUserCreationForm(request.GET)
+        
+        if user_form.is_valid():
+            user_form.save()
+            username = user_form.cleaned_data.get('username')
+            password = user_form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+
+            return Response({"message": True}, status=status.HTTP_201_CREATED)
+            
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @login_required

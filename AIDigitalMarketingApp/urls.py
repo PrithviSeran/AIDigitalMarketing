@@ -24,6 +24,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path('wel/', ReactView.as_view(), name="something"),
     path('wel/login/', UserLogin.as_view(), name='login'),
+    path('wel/signup/', UserRegister.as_view(), name='signup'),
     path('wel/main/', MainPage.as_view(), name='main'),
     path('wel/logout/', UserLogout.as_view(), name='logout'),
     path('wel/createcampaign/', CreateCampaign.as_view(), name='CreateCampaign'),

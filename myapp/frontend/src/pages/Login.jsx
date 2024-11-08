@@ -30,6 +30,8 @@ const Login = () => {
     let errMessage = ""
 
     let navigate = useNavigate();
+    let navigateNew = useNavigate();
+
 
     const userCheck = axios.get('http://localhost:8000/wel/login/').then((res) => {
         if (res.data.message){
@@ -78,6 +80,10 @@ const Login = () => {
 
     };
 
+    const SignUp = () => {
+        navigateNew('/signup')
+    }
+
     return( 
     <Section id="features">
       <div className="container relative z-2">
@@ -125,7 +131,9 @@ const Login = () => {
             />
 
             <div className="text-center mb-[3em]">
-                <Button className="w-[30em] text-center">
+                <Button 
+                className="w-[30em] text-center"
+                onClick = {SignUp}>
                     Sign-up
                 </Button>
             </div>

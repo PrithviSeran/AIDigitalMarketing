@@ -6,6 +6,8 @@ import Input from "./Input"
 import Button from "./Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react';
+
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -16,13 +18,32 @@ const Yourcampaigns = (campaigns) => {
 
   let navigate = useNavigate();
 
+  const [domains, setDomains] = useState([])
+  const [currentCampaign, setCurrentCampaign] = useState(null);
+
   const handleCampaign = (campaign) => {
 
-    navigate('/campaign',{
-      state: campaign
+    const response = axios.get("http://localhost:8000/wel/domains/",{
+        params: {
+          id: campaign.id
+        }
+      }
+    ).then((res) => {
+        setDomains(res.data.domains)
+        setCurrentCampaign(campaign);
     })
-
   }
+
+  useEffect(() => {
+    if (domains.length && currentCampaign) {
+      navigate("/campaign", {
+        state: {
+          campaign: currentCampaign,
+          domains: domains,
+        },
+      });
+    }
+  }, [domains, currentCampaign, navigate]);
 
   return (
     <div className="w-[40%]">

@@ -22,10 +22,7 @@ class WSConsumer(WebsocketConsumer):
 
         text_data = json.loads(text_data)
 
-        print(text_data)
-
         campaign_id = text_data["message"]
-        N = text_data["numOfBusinesses"]
 
         campaign = Campaign.objects.get(id = campaign_id)
 
@@ -35,7 +32,7 @@ class WSConsumer(WebsocketConsumer):
         process = CrawlerProcess(settings=crawler_settings)
         process.crawl(GetBusinessWebsites,
                       campaign_id = campaign.id,
-                      N = int(N),
+                      N = 5,
                       target_audience = campaign.target_audience,
                       purpose = campaign.purpose,
                       user_info = campaign.user_info)

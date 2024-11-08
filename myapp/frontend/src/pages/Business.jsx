@@ -2,7 +2,9 @@ import Businesscontent from "../components/Businesscontent"
 import Emailtemplate from "../components/Emailtemplate"
 import { useLocation } from 'react-router-dom';
 import ButtonGradient from "../assets/svg/ButtonGradient"; 
+import Header from "../components/Header";
 import React, { useState, useRef } from 'react';
+import Pageheader from "../components/Pageheader";
 import axios from "axios";
 
 
@@ -39,16 +41,20 @@ const Business = () => {
   })
 
   return (
-    <div className="flex flex-row">
-        <Businesscontent
-            business = {domain} 
-            />
+    <div>
+          <Pageheader/>
+          
+          <div className="mt-[6em] flex flex-row">
+            <Businesscontent
+                business = {domain} 
+                />
 
-        <Emailtemplate
-        emailContent = {emailContent}
-        />
-      
+            <Emailtemplate
+            emailContent = {emailContent}
+            />
+          </div>
     </div>
+      
   )
 }
 

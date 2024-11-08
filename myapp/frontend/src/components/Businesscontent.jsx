@@ -23,13 +23,6 @@ const Businesscontent = ({ business }) => {
                         <p>{business.content}</p>
                         </span>
                     </div>
-
-                    <div className="py-[0.3em] px-[0.3em] mx-[3em] bg-color-5 bg-opacity-[30%] rounded-[1.2em] bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                        <span className="flex flex-col w-full h-full bg-gray-900 text-white rounded-[0.75em] py-[1.5em] px-[1em]">
-                        <h5 className="h5 pb-2"> Please Enter this Organization's Email: </h5>
-                        <Input/>
-                        </span>
-                    </div>
                 </div>
             </span>
         </div>
