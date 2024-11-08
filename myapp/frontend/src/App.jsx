@@ -10,9 +10,15 @@ import Mainpage from './pages/Mainpage'
 import Campaign from './pages/Campaign'
 import Business from './pages/Business';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 const App = () => {
+
+  useEffect(() => {
+    document.title = 'AI Digital Marketing';
+  }, []);
+
   return (
 
       <Routes>
